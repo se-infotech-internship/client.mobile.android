@@ -1,9 +1,9 @@
-package com.example.finedriver.ui.login
+package com.example.finedriver.ui.login.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.finedriver.data.LoginDataSource
-import com.example.finedriver.data.LoginRepository
+import com.example.finedriver.ui.login.data.LoginDataSource
+import com.example.finedriver.ui.login.data.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -15,9 +15,9 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
-                    loginRepository = LoginRepository(
-                            dataSource = LoginDataSource()
-                    )
+                loginRepository = LoginRepository(
+                    dataSource = LoginDataSource()
+                )
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

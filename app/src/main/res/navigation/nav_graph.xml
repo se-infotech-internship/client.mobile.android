@@ -6,7 +6,109 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.finedriver.ui.login.ui.login.LoginFragment"
+        android:name="com.example.finedriver.ui.login.fragments.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.finedriver.ui.login.fragments.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/action_registrationFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainMenyFragment"
+        android:name="com.example.finedriver.ui.main.fragments.MainMenyFragment"
+        android:label="fragment_main_meny"
+        tools:layout="@layout/fragment_main_meny" >
+        <action
+            android:id="@+id/action_mainMenyFragment_to_finesFragment"
+            app:destination="@id/finesFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_cameraListFragment"
+            app:destination="@id/cameraListFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_exitFragment"
+            app:destination="@id/exitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finesFragment"
+        android:name="com.example.finedriver.ui.main.fragments.FinesFragment"
+        android:label="fragment_fines"
+        tools:layout="@layout/fragment_fines" >
+        <action
+            android:id="@+id/action_finesFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraListFragment"
+        android:name="com.example.finedriver.ui.main.fragments.CameraListFragment"
+        android:label="fragment_camera_list"
+        tools:layout="@layout/fragment_camera_list" >
+        <action
+            android:id="@+id/action_cameraListFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.example.finedriver.ui.main.fragments.MessagesFragment"
+        android:label="fragment_messages"
+        tools:layout="@layout/fragment_messages" >
+        <action
+            android:id="@+id/action_messagesFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.finedriver.ui.main.fragments.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/exitFragment"
+        android:name="com.example.finedriver.ui.main.fragments.ExitFragment"
+        android:label="fragment_exit"
+        tools:layout="@layout/fragment_exit" >
+        <action
+            android:id="@+id/action_exitFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+    </fragment>
 </navigation>

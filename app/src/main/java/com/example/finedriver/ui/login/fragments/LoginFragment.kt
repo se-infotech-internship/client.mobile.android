@@ -1,4 +1,4 @@
-package com.example.finedriver.ui.login.ui.login
+package com.example.finedriver.ui.login.fragments
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders

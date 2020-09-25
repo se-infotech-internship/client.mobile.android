@@ -27,9 +27,9 @@
     </fragment>
     <fragment
         android:id="@+id/mainMenyFragment"
-        android:name="com.example.finedriver.ui.main.fragments.MainMenyFragment"
+        android:name="com.example.finedriver.ui.main.fragments.MainMenuFragment"
         android:label="fragment_main_meny"
-        tools:layout="@layout/fragment_main_meny" >
+        tools:layout="@layout/fragment_main_menu" >
         <action
             android:id="@+id/action_mainMenyFragment_to_finesFragment"
             app:destination="@id/finesFragment" />

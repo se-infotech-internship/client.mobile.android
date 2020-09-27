@@ -15,9 +15,46 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.finedriver.R
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(R.layout.fragment_login) {
+
+
+
+
+/*    interface LoginFragmentListener{
+        fun onFragmentLoginClick()
+        fun onFragmentRegistrationClick()
+    }
+
+    lateinit var loginFragmentListener : LoginFragmentListener*/
+
+    private val loginClickListener: View.OnClickListener = View.OnClickListener { view ->
+        /*loginFragmentListener.onFragmentLoginClick()*/
+        findNavController().navigate(R.id.action_loginFragment_to_mainMenuActivity)
+    }
+
+    private val registrationClickListener: View.OnClickListener = View.OnClickListener { view ->
+        /*loginFragmentListener.onFragmentLoginClick()*/
+        findNavController().navigate(R.id.action_loginFragment_to_registrationFragment);
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+ /*       loginFragmentListener = activity as LoginFragmentListener*/
+
+        val loginButton = view.findViewById<Button>(R.id.loginButton)
+        val registrationButton = view.findViewById<Button>(R.id.registrationButton)
+
+        loginButton?.setOnClickListener(loginClickListener)
+        registrationButton.setOnClickListener(registrationClickListener)
+    }
 
 }

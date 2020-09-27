@@ -11,12 +11,21 @@ import com.example.finedriver.ui.login.fragments.LoginFragment
 
 class LoginActivity : AppCompatActivity() {
 
-
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        navController = Navigation.findNavController(this, R.id.login_nav_host);
 
     }
+
+/*    override fun onFragmentLoginClick() {
+        navController.navigate(R.id.action_loginFragment_to_mainMenuActivity);
+    }
+
+    override fun onFragmentRegistrationClick() {
+        navController.navigate(R.id.action_loginFragment_to_registrationFragment);
+    }*/
 
 }

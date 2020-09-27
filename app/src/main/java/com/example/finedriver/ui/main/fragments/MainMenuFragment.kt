@@ -15,6 +15,6 @@ import com.example.finedriver.R
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class MainMenuFragment : Fragment() {
+class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
 
     }

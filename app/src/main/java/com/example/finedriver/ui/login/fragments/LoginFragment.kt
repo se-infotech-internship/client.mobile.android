@@ -24,31 +24,17 @@ import com.example.finedriver.R
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
-
-
-
-/*    interface LoginFragmentListener{
-        fun onFragmentLoginClick()
-        fun onFragmentRegistrationClick()
-    }
-
-    lateinit var loginFragmentListener : LoginFragmentListener*/
-
     private val loginClickListener: View.OnClickListener = View.OnClickListener { view ->
-        /*loginFragmentListener.onFragmentLoginClick()*/
         findNavController().navigate(R.id.action_loginFragment_to_mainMenuActivity)
     }
 
     private val registrationClickListener: View.OnClickListener = View.OnClickListener { view ->
-        /*loginFragmentListener.onFragmentLoginClick()*/
         findNavController().navigate(R.id.action_loginFragment_to_registrationFragment);
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
- /*       loginFragmentListener = activity as LoginFragmentListener*/
 
         val loginButton = view.findViewById<Button>(R.id.loginButton)
         val registrationButton = view.findViewById<Button>(R.id.registrationButton)

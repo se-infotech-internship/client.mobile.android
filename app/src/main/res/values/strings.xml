@@ -12,4 +12,11 @@
     <string name="title_activity_main_meny">FullscreenActivity</string>
     <string name="Registration">Зареєструватись за допомогою...</string>
     <string name="hello_blank_fragment">Зразок</string>
+    <string name="map_text">Мапа</string>
+    <string name="fines_text">Штрафи</string>
+    <string name="camera_text">Перелік відеокамер</string>
+    <string name="message_text">Повідомлення</string>
+    <string name="profile_text">Профіль користувача</string>
+    <string name="settings">Налаштування додатку</string>
+    <string name="exit_text">Вихід</string>
 </resources>

@@ -37,10 +37,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         val loginButton = view.findViewById<Button>(R.id.loginButton)
-        val registrationButton = view.findViewById<Button>(R.id.registrationButton)
+       /* val registrationButton = view.findViewById<Button>(R.id.registrationButton)*/
 
         loginButton?.setOnClickListener(loginClickListener)
-        registrationButton.setOnClickListener(registrationClickListener)
+     /*   registrationButton.setOnClickListener(registrationClickListener)*/
     }
 
 }

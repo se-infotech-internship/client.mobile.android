@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.example.finedriver.ui.main.fragments.MapsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.map.MapsFragment"
         tools:layout="@layout/fragment_maps"
         android:label="fragment_maps">
         <action

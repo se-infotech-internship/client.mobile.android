@@ -3,7 +3,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Електронна пошта</string>
     <string name="prompt_password">Пароль</string>
-    <string name="action_sign_in">Поїхали</string>
+    <string name="action_sign_in">Зареєструватись</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -22,4 +22,5 @@
     <string name="settings">Налаштування додатку</string>
     <string name="exit_text">Вихід</string>
     <string name="or">або</string>
+    <string name="map_speed_text">Ваша швидкість:</string>
 </resources>

@@ -23,4 +23,5 @@
     <string name="exit_text">Вихід</string>
     <string name="or">або</string>
     <string name="map_speed_text">Ваша швидкість:</string>
+    <string name="speed_text">0 км/г</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.finedriver.ui.main.fragments.map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +61,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+        mapFragment?.getMapAsync(this)
+
     }
 
 
@@ -77,7 +81,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         } == PackageManager.PERMISSION_GRANTED
     }
 
-    // Checks if users have given their location and sets location enabled if so.
+
+    @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
             map.isMyLocationEnabled = true

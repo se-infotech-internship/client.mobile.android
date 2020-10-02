@@ -20,12 +20,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-/*    override fun onFragmentLoginClick() {
-        navController.navigate(R.id.action_loginFragment_to_mainMenuActivity);
-    }
 
-    override fun onFragmentRegistrationClick() {
-        navController.navigate(R.id.action_loginFragment_to_registrationFragment);
-    }*/
 
 }

@@ -74,4 +74,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/my_location_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:backgroundTint="@color/white"
+        app:srcCompat="@drawable/ic_map_location_button"
+        app:maxImageSize="@dimen/my_location_button"
+        android:layout_margin="16dp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

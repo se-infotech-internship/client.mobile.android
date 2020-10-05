@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.finedriver.R
 import com.example.finedriver.data.CameraRepository
 import com.example.finedriver.data.model.CameraItem
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_maps.*
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
@@ -36,8 +38,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var camerasList : List<CameraItem>
     private lateinit var camerasCoordinationList : List<LatLng>
     private lateinit var map: GoogleMap
-    private var curentLon : Double? = 50.4499
-    private var curentLat : Double? = 30.5240
+    private var curentLon : Double? = 30.5234
+    private var curentLat : Double? = 50.4494
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+        my_location_button.setOnClickListener(myLocationClickListener)
 
     }
 
@@ -77,12 +80,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
         map.isTrafficEnabled = true
 
-        enableMyLocation()
+
         getLastLocation()
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curentLon?.let { curentLat?.let { it1 ->
-            LatLng(
-                it, it1)
-        } }, 16f))
+        moveToMyLocation()
     }
 
 
@@ -150,11 +150,28 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
+        enableMyLocation()
         fusedLocationClient.lastLocation
             .addOnCompleteListener { taskLocation ->
                 val location = taskLocation.result
                 curentLat = location?.latitude
                 curentLon = location?.longitude
             }
+    }
+
+
+    private val myLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+        getLastLocation()
+        moveToMyLocation()
+    }
+
+    private fun moveToMyLocation() {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curentLon?.let {
+            curentLat?.let { it1 ->
+                LatLng(
+                    it1, it
+                )
+            }
+        }, 16f))
     }
 }

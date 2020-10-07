@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.finedriver.R
-import com.example.finedriver.data.CameraRepository
+import com.example.finedriver.data.cameraData.CameraRepository
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class CameraListFragment : Fragment() {
     //Здесь и далее тестовый код
-    var cameraRepository = CameraRepository()
+    var cameraRepository =
+        CameraRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

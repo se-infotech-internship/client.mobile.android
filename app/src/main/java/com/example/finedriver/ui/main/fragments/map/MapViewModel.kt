@@ -1,14 +1,14 @@
 package com.example.finedriver.ui.main.fragments.map
 
 import android.app.Activity
-import android.graphics.Camera
 import androidx.lifecycle.ViewModel
-import com.example.finedriver.data.CameraRepository
-import com.example.finedriver.data.model.CameraItem
+import com.example.finedriver.data.cameraData.CameraRepository
+import com.example.finedriver.data.cameraData.model.CameraItem
 import com.google.android.gms.maps.model.LatLng
 
 class MapViewModel : ViewModel() {
-    private val repository = CameraRepository()
+    private val repository =
+        CameraRepository()
 
     private fun getStringFromJsonFile(activity: Activity):String {
         return repository.getStringFromJsonFile(activity)
@@ -26,6 +26,8 @@ class MapViewModel : ViewModel() {
     fun getCamerasCoordinationList(activity: Activity): List<LatLng>{
         return repository.getCamerasCoordinationList(getCameraList(activity))
     }
+
+
 
 
 }

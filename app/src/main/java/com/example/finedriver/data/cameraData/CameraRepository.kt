@@ -1,8 +1,8 @@
-package com.example.finedriver.data
+package com.example.finedriver.data.cameraData
 
 import android.app.Activity
 import com.example.finedriver.R
-import com.example.finedriver.data.model.CameraItem
+import com.example.finedriver.data.cameraData.model.CameraItem
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.GsonBuilder
 

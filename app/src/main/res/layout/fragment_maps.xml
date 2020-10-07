@@ -13,7 +13,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="655dp"
+        android:layout_height="652dp"
         app:layout_constraintBottom_toTopOf="@+id/exitLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,6 +21,51 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:context=".ui.main.fragments.map.MapsFragment" />
+
+    <!-- TODO: make SearchView  https://www.youtube.com/watch?v=iWYsBDCGhGw&ab_channel=AndroidCoding-->
+    <EditText
+        android:id="@+id/find_location_textView"
+        android:layout_width="288dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/password_back"
+        android:hint="@string/map_search"
+        android:inputType="textAutoComplete"
+        android:paddingStart="8dp"
+        android:visibility="invisible"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/find_location_button" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/my_location_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:maxImageSize="@dimen/my_location_button"
+        app:srcCompat="@drawable/ic_map_location_button" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/find_location_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_find_location" />
+
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exitLayout"
@@ -74,18 +119,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/my_location_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        app:backgroundTint="@color/white"
-        app:srcCompat="@drawable/ic_map_location_button"
-        app:maxImageSize="@dimen/my_location_button"
-        android:layout_margin="16dp"
 
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

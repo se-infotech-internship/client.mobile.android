@@ -1,7 +1,5 @@
-package com.example.finedriver.data.model
+package com.example.finedriver.data.cameraData.model
 
-
-import com.google.gson.annotations.SerializedName
 
 data class CameraItem(
     val address: String,

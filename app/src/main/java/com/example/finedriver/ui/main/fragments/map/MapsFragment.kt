@@ -6,40 +6,57 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.example.finedriver.R
-import com.example.finedriver.data.CameraRepository
-import com.example.finedriver.data.model.CameraItem
+import com.example.finedriver.data.cameraData.CameraRepository
+import com.example.finedriver.data.cameraData.model.CameraItem
+import com.example.finedriver.data.routeData.RetrofitClient
+/*import com.example.finedriver.data.routeData.RetrofitClient*/
+import com.example.finedriver.data.routeData.model.DirectionResponses
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.PolyUtil
 import kotlinx.android.synthetic.main.fragment_maps.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
+import java.io.IOException
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var cameraRepository = CameraRepository()
+    private var cameraRepository =
+        CameraRepository()
     private lateinit var camerasList : List<CameraItem>
     private lateinit var camerasCoordinationList : List<LatLng>
     private lateinit var map: GoogleMap
-    private var curentLon : Double? = 30.5234
-    private var curentLat : Double? = 50.4494
+    private var currentLon : Double = 30.5234
+    private var currentLat : Double = 50.4494
+
+    private var destinationAddress : String = ""
+    private var destinationLon : Double = 0.0
+    private var destinationLat : Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +75,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
+
         my_location_button.setOnClickListener(myLocationClickListener)
+        find_location_button.setOnClickListener(findLocationClickListener)
 
     }
 
@@ -78,8 +98,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
             googleMap.addMarker(MarkerOptions().position(LatLng(cameraItem.lat, cameraItem.lon)).icon(bitmap).title(cameraItem.address))
         }
-        map.isTrafficEnabled = true
-
+        /*map.isTrafficEnabled = true*/
 
         getLastLocation()
         moveToMyLocation()
@@ -99,6 +118,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
             map.isMyLocationEnabled = true
+            map.uiSettings.isMyLocationButtonEnabled = false
         }
         else {
             activity?.let {
@@ -110,11 +130,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-
-
-
-
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -154,8 +169,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         fusedLocationClient.lastLocation
             .addOnCompleteListener { taskLocation ->
                 val location = taskLocation.result
-                curentLat = location?.latitude
-                curentLon = location?.longitude
+                currentLat = location.latitude
+                currentLon = location.longitude
             }
     }
 
@@ -165,13 +180,73 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         moveToMyLocation()
     }
 
+    private val findLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+        if (find_location_textView.visibility == View.VISIBLE) {
+            find_location_textView.visibility = View.INVISIBLE
+            destinationAddress = find_location_textView.text.toString()
+            getCoordinationByAddress(destinationAddress)
+
+
+            val currentLocation = "$currentLat,$currentLon"
+            val destination = "$destinationLat,$destinationLon"
+
+            map.addMarker(MarkerOptions()
+                .position(LatLng(destinationLat,destinationLon))
+                .title(destinationAddress))
+
+            val apiServices = RetrofitClient.directionApiServices
+            apiServices.getDirection(currentLocation, destination, getString(R.string.google_maps_key))
+                .enqueue(object : Callback<DirectionResponses> {
+                    override fun onResponse(call: Call<DirectionResponses>, response: Response<DirectionResponses>) {
+                        drawPolyline(response)
+                        Log.d("Все отлично!", response.message())
+                    }
+
+                    override fun onFailure(call: Call<DirectionResponses>, t: Throwable) {
+                        Log.e("Все плохо!!!!", t.localizedMessage)
+                    }
+                })
+        }
+        else{
+            find_location_textView.visibility = View.VISIBLE
+        }
+    }
+
     private fun moveToMyLocation() {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curentLon?.let {
-            curentLat?.let { it1 ->
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLon.let {
+            currentLat.let { it1 ->
                 LatLng(
                     it1, it
                 )
             }
         }, 16f))
     }
+
+    private fun getCoordinationByAddress(address: String) {
+        val geocoder = Geocoder(activity)
+        val addresses: List<Address>?
+
+        try {
+            addresses = geocoder.getFromLocationName(address, 1)
+
+            if (addresses.isNotEmpty()) {
+                val addr: Address = addresses.get(0)
+                destinationLon = addr.longitude
+                destinationLat = addr.latitude
+            }
+        } catch (e: IOException) {
+            Log.e("MapsActivity", e.localizedMessage)
+        }
+    }
+
+
+    private fun drawPolyline(response: Response<DirectionResponses>) {
+        val shape = response.body()?.routes?.get(0)?.overviewPolyline?.points
+        val polyline = PolylineOptions()
+            .addAll(PolyUtil.decode(shape))
+            .width(16f)
+            .color(Color.BLUE)
+        map.addPolyline(polyline)
+    }
+
 }

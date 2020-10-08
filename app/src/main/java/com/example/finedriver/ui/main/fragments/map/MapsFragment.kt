@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -169,8 +170,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         fusedLocationClient.lastLocation
             .addOnCompleteListener { taskLocation ->
                 val location = taskLocation.result
-                currentLat = location.latitude
-                currentLon = location.longitude
+                if (location!=null) {
+                    currentLat = location.latitude
+                    currentLon = location.longitude
+                }
             }
     }
 
@@ -183,29 +186,34 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val findLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
         if (find_location_textView.visibility == View.VISIBLE) {
             find_location_textView.visibility = View.INVISIBLE
-            destinationAddress = find_location_textView.text.toString()
-            getCoordinationByAddress(destinationAddress)
 
+            if (find_location_textView.text != null) {
+                destinationAddress = find_location_textView.text.toString()
+                find_location_textView.text.clear()
+                getCoordinationByAddress(destinationAddress)
 
-            val currentLocation = "$currentLat,$currentLon"
-            val destination = "$destinationLat,$destinationLon"
+                if (destinationLat==0.0) {
+                    val currentLocation = "$currentLat,$currentLon"
+                    val destination = "$destinationLat,$destinationLon"
 
-            map.addMarker(MarkerOptions()
-                .position(LatLng(destinationLat,destinationLon))
-                .title(destinationAddress))
+                    map.addMarker(MarkerOptions()
+                        .position(LatLng(destinationLat,destinationLon))
+                        .title(destinationAddress))
 
-            val apiServices = RetrofitClient.directionApiServices
-            apiServices.getDirection(currentLocation, destination, getString(R.string.google_maps_key))
-                .enqueue(object : Callback<DirectionResponses> {
-                    override fun onResponse(call: Call<DirectionResponses>, response: Response<DirectionResponses>) {
-                        drawPolyline(response)
-                        Log.d("Все отлично!", response.message())
-                    }
+                    val apiServices = RetrofitClient.directionApiServices
+                    apiServices.getDirection(currentLocation, destination, getString(R.string.google_maps_key))
+                        .enqueue(object : Callback<DirectionResponses> {
+                            override fun onResponse(call: Call<DirectionResponses>, response: Response<DirectionResponses>) {
+                                drawPolyline(response)
+                                Log.d("Все отлично!", response.message())
+                            }
 
-                    override fun onFailure(call: Call<DirectionResponses>, t: Throwable) {
-                        Log.e("Все плохо!!!!", t.localizedMessage)
-                    }
-                })
+                            override fun onFailure(call: Call<DirectionResponses>, t: Throwable) {
+                                Log.e("Все плохо!!!!", t.localizedMessage)
+                            }
+                        })
+                }
+            }
         }
         else{
             find_location_textView.visibility = View.VISIBLE
@@ -233,6 +241,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 val addr: Address = addresses.get(0)
                 destinationLon = addr.longitude
                 destinationLat = addr.latitude
+            }
+            else{
+                Toast.makeText(activity, "Адреса не знайдена.", Toast.LENGTH_SHORT).show()
             }
         } catch (e: IOException) {
             Log.e("MapsActivity", e.localizedMessage)

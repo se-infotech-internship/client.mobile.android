@@ -9,29 +9,37 @@
     android:layout_height="match_parent"
     >
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="652dp"
-        app:layout_constraintBottom_toTopOf="@+id/exitLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context=".ui.main.fragments.map.MapsFragment" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/spedPanel">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="656dp"
+            app:layout_constraintBottom_toTopOf="@+id/spedPanel"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:context=".ui.main.fragments.map.MapsFragment" />
+    </FrameLayout>
+
 
     <!-- TODO: make SearchView  https://www.youtube.com/watch?v=iWYsBDCGhGw&ab_channel=AndroidCoding-->
     <EditText
         android:id="@+id/find_location_textView"
         android:layout_width="288dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/password_back"
+        android:background="@drawable/ic_map_find_back2"
         android:hint="@string/map_search"
         android:inputType="textAutoComplete"
-        android:paddingStart="8dp"
+        android:padding="24dp"
         android:visibility="invisible"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,16 +49,16 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/my_location_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintBottom_toTopOf="@+id/spedPanel"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:maxImageSize="@dimen/my_location_button"
-        app:srcCompat="@drawable/ic_map_location_button" />
+
+        app:srcCompat="@drawable/ic_map_my_location_button" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/find_location_button"
@@ -60,18 +68,14 @@
         android:layout_margin="16dp"
         app:backgroundTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_find_location" />
 
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/exitLayout"
+        android:id="@+id/spedPanel"
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,9 +102,9 @@
             android:layout_width="120dp"
             android:layout_height="40dp"
             android:layout_marginStart="34dp"
-            android:text="@string/speed_text"
-            android:paddingStart="6dp"
             android:layout_marginTop="0dp"
+            android:paddingStart="6dp"
+            android:text="@string/speed_text"
             android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exit_text"
@@ -111,8 +115,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/ic_volume_map"
             android:layout_marginBottom="20dp"
+            android:background="@drawable/ic_volume_map"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -30,4 +30,6 @@
     <string name="map_search">Пошук</string>
 
     <string name="base_url">https://maps.googleapis.com</string>
+
+    <string name="location_updated">Location Updated: %1$s</string>
 </resources>

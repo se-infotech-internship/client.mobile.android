@@ -31,19 +31,15 @@
 
 
     <!-- TODO: make SearchView  https://www.youtube.com/watch?v=iWYsBDCGhGw&ab_channel=AndroidCoding-->
-    <EditText
-        android:id="@+id/find_location_textView"
+    <SearchView
+        android:id="@+id/find_location_searchView"
         android:layout_width="288dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ic_map_find_back2"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
         android:hint="@string/map_search"
-        android:inputType="textAutoComplete"
-        android:padding="24dp"
-        android:selectAllOnFocus="true"
+        android:background="@color/white"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/find_location_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -107,8 +103,8 @@
             tools:text="Ваша швидкість:" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="120dp"
+            android:id="@+id/speedTextView"
+            android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginStart="34dp"
             android:layout_marginTop="0dp"

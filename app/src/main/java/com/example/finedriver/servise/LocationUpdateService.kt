@@ -11,9 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.finedriver.ui.main.fragments.map.MapUtils
 import com.example.finedriver.R
-import com.example.finedriver.ui.main.MainMenuActivity
 import com.example.finedriver.ui.main.fragments.map.MapUtils.setRequestingLocationUpdates
-import com.example.finedriver.ui.main.fragments.map.MapsFragment
 import com.google.android.gms.location.*
 
 class LocationUpdateService : Service() {
@@ -36,37 +34,31 @@ class LocationUpdateService : Service() {
                 onNewLocation(locationResult.lastLocation)
             }
         }
-        createLocationRequest()
         getLastLocation()
         val handlerThread = HandlerThread(TAG)
         handlerThread.start()
         mServiceHandler = Handler(handlerThread.looper)
         mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
-        // Android O requires a Notification Channel.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name: CharSequence = getString(R.string.app_name)
-            // Create the channel for the notification
             val mChannel = NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT)
-
-            // Set the Notification Channel for the Notification Manager.
             mNotificationManager!!.createNotificationChannel(mChannel)
         }
     }
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.i(TAG, "Service started")
+        createLocationRequest()
+        requestLocationUpdates()
         val startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
             false)
 
-        // We got here because the user decided to remove location updates from the notification.
         if (startedFromNotification) {
             removeLocationUpdates()
             stopSelf()
         }
-        // Tells the system to not try to recreate the service after it has been killed.
-        return Service.START_NOT_STICKY
+        return Service.START_STICKY
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -97,9 +89,9 @@ class LocationUpdateService : Service() {
         mServiceHandler!!.removeCallbacksAndMessages(null)
     }
 
-    class LocalBinder : Binder() {
+    inner class LocalBinder : Binder() {
         val service: LocationUpdateService
-            get() = service
+            get() = this@LocationUpdateService
     }
 
     private fun createLocationRequest() {
@@ -110,15 +102,12 @@ class LocationUpdateService : Service() {
     }
 
     private fun onNewLocation(location: Location) {
-        Log.i(TAG, "New location: $location")
         mLocation = location
 
-        // Notify anyone listening for broadcasts about the new location.
         val intent = Intent(ACTION_BROADCAST)
         intent.putExtra(EXTRA_LOCATION, location)
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent)
 
-        // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
         }
@@ -127,26 +116,26 @@ class LocationUpdateService : Service() {
 
     private fun getNotification(): Notification? {
         val intent = Intent(this, LocationUpdateService::class.java)
-        val text: CharSequence = mLocation?.longitude.toString() + " " + mLocation?.latitude.toString()
+        val coordinationText: CharSequence = mLocation?.longitude.toString() + " " + mLocation?.latitude.toString()
 
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true)
 
-        // The PendingIntent that leads to a call to onStartCommand() in this service.
         val servicePendingIntent = PendingIntent.getService(this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT)
 
-        // The PendingIntent to launch activity.
-        val activityPendingIntent = PendingIntent.getActivity(this, 0,
-            Intent(this, MainMenuActivity::class.java), 0)
+       /*
+       Пригодится для кнопки перезапуска
+       val activityPendingIntent = PendingIntent.getActivity(this, 0,
+            Intent(this, MainMenuActivity::class.java), 0)*/
         val builder = NotificationCompat.Builder(this)
             .addAction(
                 R.drawable.ic_exit, getString(R.string.remove_location_updates),
                 servicePendingIntent)
-            .setContentText(text)
+            .setContentText(coordinationText)
             .setOngoing(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_camera)
-            .setTicker(text)
+            .setTicker(coordinationText)
             .setWhen(System.currentTimeMillis())
 
         // Set the Channel ID for Android O.
@@ -189,7 +178,7 @@ class LocationUpdateService : Service() {
     fun requestLocationUpdates() {
         Log.i(TAG, "Requesting location updates")
         setRequestingLocationUpdates(this, true)
-        startService(Intent(applicationContext, LocationUpdateService::class.java))
+      /*  startService(Intent(applicationContext, LocationUpdateService::class.java))*/
         try {
             mFusedLocationClient!!.requestLocationUpdates(mLocationRequest,
                 mLocationCallback, Looper.myLooper())

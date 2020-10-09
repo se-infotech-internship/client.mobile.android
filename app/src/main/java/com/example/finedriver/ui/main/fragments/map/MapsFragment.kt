@@ -22,6 +22,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -56,14 +57,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
-    private lateinit var camerasCoordinationList : List<LatLng>
     private lateinit var map: GoogleMap
     private var currentLon : Double = 30.5234
     private var currentLat : Double = 50.4494
+    private var userSpeed : String = "0 км/г"
 
     private var destinationAddress : String = ""
     private var destinationLon : Double = 0.0
     private var destinationLat : Double = 0.0
+
 
 
 
@@ -75,6 +77,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 enableMyLocation()
             }
         }
+
     }
 
     override fun onCreateView(
@@ -97,6 +100,30 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         find_location_button.setOnClickListener(findLocationClickListener)
         to_menu_button.setOnClickListener(toMenuButtonClickListener)
 
+        find_location_searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                destinationAddress = find_location_searchView.query.toString()
+                getCoordinationByAddress(destinationAddress)
+                find_location_searchView.visibility = View.INVISIBLE
+                find_location_searchView.setQuery("", false)
+                find_location_button.show()
+                if (destinationLat!=0.0) {
+                    map.clear()
+                    drawCamerasOnMap(map)
+                    map.isTrafficEnabled = false
+                    val currentLocation = "$currentLat,$currentLon"
+                    val destination = "$destinationLat,$destinationLon"
+
+                    buildRoute(currentLocation, destination)
+                }
+
+                return true
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+
     }
 
 
@@ -115,6 +142,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             object : OnMapClickListener {
                 override fun onMapClick(latLng: LatLng) {
                     map.clear()
+                    drawCamerasOnMap(map)
                     map.isTrafficEnabled = false
                     val currentLocation = "$currentLat,$currentLon"
                     val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
@@ -154,7 +182,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onRequestPermissionsResult(
+/*    override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray) {
@@ -164,47 +192,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 enableMyLocation()
             }
         }
-    }
+    }*/
 
-
-    fun generateBitmapDescriptorFromRes(
-        context: Context?, resId: Int
-    ): BitmapDescriptor? {
-        val drawable = context?.let { ContextCompat.getDrawable(it, resId) }
-        drawable!!.setBounds(
-            0,
-            0,
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight
-        )
-        val bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         enableMyLocation()
-        /*var ltlng :LatLng*/
-        map.setOnMyLocationChangeListener(OnMyLocationChangeListener { location ->
-            currentLat = location.latitude
-            currentLon = location.longitude
-            /*ltlng = LatLng(location.latitude, location.longitude)*/
-        })
-
-
-
         fusedLocationClient.lastLocation
             .addOnCompleteListener { taskLocation ->
                 val location = taskLocation.result
                 if (location!=null) {
                     currentLat = location.latitude
                     currentLon = location.longitude
+                    /*userSpeed = (location.getSpeed()*3.6).toString()*/
+
                 }
             }
     }
@@ -215,34 +216,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         moveToMyLocation()
     }
 
-
-    //get destination location when user click on map
-
     private val findLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
-        if (find_location_textView.visibility == View.VISIBLE) {
-            find_location_textView.visibility = View.INVISIBLE
-            to_menu_button.show()
-
-            if (find_location_textView.text != null) {
-                destinationAddress = find_location_textView.text.toString()
-                find_location_textView.text.clear()
-                getCoordinationByAddress(destinationAddress)
-
-                if (destinationLat!=0.0) {
-                    map.clear()
-                    drawCamerasOnMap(map)
-                    map.isTrafficEnabled = false
-                    val currentLocation = "$currentLat,$currentLon"
-                    val destination = "$destinationLat,$destinationLon"
-
-                    buildRoute(currentLocation, destination)
-                }
-            }
+        if (find_location_searchView.visibility != View.VISIBLE) {
+            find_location_searchView.visibility = View.VISIBLE
+            find_location_button.hide()
         }
-        else{
-            find_location_textView.visibility = View.VISIBLE
-            to_menu_button.hide()
-        }
+
     }
 
     private fun buildRoute(currentLocation: String, destination: String) {
@@ -318,22 +297,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun drawCamerasOnMap(googleMap:GoogleMap){
         camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(requireActivity()))
-        camerasCoordinationList = cameraRepository.getCamerasCoordinationList(camerasList)
 
         var bitmap: BitmapDescriptor?
         for (cameraItem in camerasList) {
             bitmap = if (cameraItem.state == "on") {
-                generateBitmapDescriptorFromRes(activity, R.drawable.ic_map_camera_on)
+                MapUtils.generateBitmapDescriptorFromRes(activity, R.drawable.ic_map_camera_on)
             } else {
-                generateBitmapDescriptorFromRes(activity, R.drawable.ic_map_camera_off)
+                MapUtils.generateBitmapDescriptorFromRes(activity, R.drawable.ic_map_camera_off)
             }
             googleMap.addMarker(MarkerOptions().position(LatLng(cameraItem.lat, cameraItem.lon)).icon(bitmap).title(cameraItem.address + "  Обмеження: "+ cameraItem.speed))
         }
     }
 
-/*    companion object {
-        private val TAG = MapsFragment::class.java.simpleName
-        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-    }*/
 
 }

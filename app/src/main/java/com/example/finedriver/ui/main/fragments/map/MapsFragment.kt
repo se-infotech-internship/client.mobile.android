@@ -4,7 +4,10 @@ package com.example.finedriver.ui.main.fragments.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
+import android.content.ServiceConnection
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -12,6 +15,8 @@ import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.IBinder
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,6 +32,7 @@ import com.example.finedriver.data.cameraData.CameraRepository
 import com.example.finedriver.data.cameraData.model.CameraItem
 import com.example.finedriver.data.routeData.RetrofitClient
 import com.example.finedriver.data.routeData.model.DirectionResponses
+import com.example.finedriver.servise.LocationUpdateService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -59,9 +65,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var destinationLon : Double = 0.0
     private var destinationLat : Double = 0.0
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        if (MapUtils.requestingLocationUpdates(activity)) {
+            if (!isPermissionGranted()) {
+                enableMyLocation()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -112,6 +125,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+
+
     private fun isPermissionGranted() : Boolean {
         return activity?.let {
             ContextCompat.checkSelfPermission(
@@ -119,6 +134,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION)
         } == PackageManager.PERMISSION_GRANTED
     }
+
 
 
     @SuppressLint("MissingPermission")
@@ -149,6 +165,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
 
     fun generateBitmapDescriptorFromRes(
         context: Context?, resId: Int
@@ -313,5 +330,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             googleMap.addMarker(MarkerOptions().position(LatLng(cameraItem.lat, cameraItem.lon)).icon(bitmap).title(cameraItem.address + "  Обмеження: "+ cameraItem.speed))
         }
     }
+
+/*    companion object {
+        private val TAG = MapsFragment::class.java.simpleName
+        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+    }*/
 
 }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_message_layout"
+    android:layout_width="375dp"
+    android:layout_height="152dp"
+    android:layout_marginTop="5dp"
+    android:visibility="invisible"
+    android:background="@drawable/ic_push_message"
+>
+
+    <TextView
+        android:id="@+id/cameraText"
+        android:layout_width="101dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="17dp"
+        android:maxLines="1"
+        android:text="@string/cameraString"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Камера" />
+
+    <TextView
+        android:id="@+id/mapMessageText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraText"
+        android:layout_width="85dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="13dp"
+        android:maxLines="1"
+        android:text="@string/pushMessageString"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="Обмеження:" />
+
+    <TextView
+        android:id="@+id/speed_limit_text"
+        android:layout_width="101dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="39dp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapMessageText"
+        tools:text="65 км/г" />
+
+    <TextView
+        android:id="@+id/address_text"
+        android:layout_width="224dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="13dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/speed_limit_text"
+        tools:text="Пр. Оболонський , Київ " />
+
+    <TextView
+        android:id="@+id/distance_text"
+        android:layout_width="78dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="18dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="500 м" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

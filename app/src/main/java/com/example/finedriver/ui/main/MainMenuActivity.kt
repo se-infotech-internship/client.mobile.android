@@ -4,14 +4,16 @@ import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.Location
-import android.media.AudioManager
-import android.media.ToneGenerator
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.IBinder
 import android.preference.PreferenceManager
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.finedriver.BeepHelper
 import com.example.finedriver.R
@@ -21,6 +23,7 @@ import com.example.finedriver.servise.LocationUpdateService
 import com.example.finedriver.ui.main.fragments.map.MapUtils
 import kotlinx.android.synthetic.main.fragment_maps.*
 import kotlin.math.roundToInt
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -35,6 +38,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
     private var beepHelper: BeepHelper? = null
+    private var cameraId: Int = -1
 
 
 
@@ -44,6 +48,10 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         setContentView(R.layout.activity_main_menu)
         myReceiver = MyReceiver()
         camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(this))
+
+        /*if (!checkNotificationPermissions()) {
+                requestNotificationPermission()
+        }*/
 
         if (MapUtils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
@@ -114,6 +122,49 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         }
     }
 
+/*    private fun checkNotificationPermissions(): Boolean {
+        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+    }
+
+
+    private fun requestNotificationPermission() {
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+
+        if (!shouldProvideRationale) {
+            ActivityCompat.requestPermissions(this@MainMenuActivity, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY),
+                NOTIFICATION_PERMISSION_CODE)
+
+        }
+
+    }*/
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+
+        //Checking the request code of our request
+        if (requestCode == NOTIFICATION_PERMISSION_CODE) {
+
+            //If permission is granted
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Displaying a toast
+                Toast.makeText(
+                    this,
+                    "Разрешение получено",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                //Displaying another toast if permission is not granted
+                Toast.makeText(this, "Разрешение отклонено!!!", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
+    }
+
 
     private inner class MyReceiver : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
@@ -125,7 +176,9 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
 
 
-                for (cameraItem in camerasList) {
+               /* for ( cameraItem in camerasList) {*/
+                for ( i in camerasList.indices) {
+                    val cameraItem = camerasList[i]
                     val endPoint = Location("Camera")
                     endPoint.latitude = cameraItem.lat
                     endPoint.longitude = cameraItem.lon
@@ -133,42 +186,41 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
 
 
-                    when {
-                        distance <= 200 -> {
-                            beepHelper = BeepHelper()
-                            beepHelper!!.beep(100)
-                        }
-                        distance <= 400 -> {
-                            beepHelper = BeepHelper()
-                            beepHelper!!.beep(500)
-                        }
-                        distance <= 700 -> {
-                            if (beepHelper == null) {
-                                beepHelper = BeepHelper()
-                                beepHelper!!.beep(1000)
-                            }
-                            Toast.makeText(
-                                this@MainMenuActivity,
-                                "(" + location.latitude + ", " + location.longitude + ")" + distance,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        else -> {
-                            beepHelper=null
-                        }
+                    if (distance <= 200) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(100)
+                    }
+                    else if (distance <= 400) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(500)
+                    }
+                    else if (distance <= 700) {
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(1000)
+
+                        cameraId = i
+                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
+                        address_text.text = cameraItem.address
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        map_message_layout.visibility = View.VISIBLE
+
+                    }
+                    else if (distance >= 700 && cameraId==i){
+                        beepHelper=null
+                        map_message_layout.visibility = View.INVISIBLE
+                        cameraId = -1
                     }
                 }
             }
         }
     }
 
-
-
-
     companion object {
         private val TAG = MainMenuActivity::class.java.simpleName
         private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-
+        private const val NOTIFICATION_PERMISSION_CODE = 123
 
     }
 

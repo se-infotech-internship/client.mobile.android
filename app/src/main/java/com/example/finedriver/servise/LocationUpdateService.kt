@@ -1,18 +1,31 @@
 package com.example.finedriver.servise
 
+import android.Manifest
 import android.app.*
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.Location
 import android.os.*
 import android.util.Log
+import android.view.View
+import android.widget.RemoteViews
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.finedriver.ui.main.fragments.map.MapUtils
+import com.example.finedriver.BeepHelper
 import com.example.finedriver.R
+import com.example.finedriver.data.cameraData.CameraRepository
+import com.example.finedriver.data.cameraData.model.CameraItem
+import com.example.finedriver.ui.main.fragments.map.MapUtils
 import com.example.finedriver.ui.main.fragments.map.MapUtils.setRequestingLocationUpdates
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.fragment_maps.*
+import kotlin.math.roundToInt
+
 
 class LocationUpdateService : Service() {
     private val mBinder: IBinder = LocalBinder()
@@ -23,10 +36,20 @@ class LocationUpdateService : Service() {
     private var mNotificationManager: NotificationManager? = null
     private var mLocationRequest: LocationRequest? = null
     private var mLocation: Location? = null
+    //private  var notificationManager:NotificationManagerCompat? = null
+
+
+    private var cameraRepository = CameraRepository()
+    private lateinit var camerasList : List<CameraItem>
+    private var beepHelper: BeepHelper? = null
 
 
 
     override fun onCreate() {
+
+        camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(this))
+
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -34,6 +57,9 @@ class LocationUpdateService : Service() {
                 onNewLocation(locationResult.lastLocation)
             }
         }
+
+
+        //notificationManager = NotificationManagerCompat.from(this)
         getLastLocation()
         val handlerThread = HandlerThread(TAG)
         handlerThread.start()
@@ -123,11 +149,29 @@ class LocationUpdateService : Service() {
         val servicePendingIntent = PendingIntent.getService(this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT)
 
-       /*
+
+
+
+
+
+
+
+
+
+        //val remoteViews = RemoteViews(packageName, R.layout.notification)
+        /*remoteViews.setTextViewText(R.id.address_text, "Custom notification text")*/
+        /*remoteViews.setOnClickPendingIntent(R.id.root, rootPendingIntent)*/
+
+
+        /*
        Пригодится для кнопки перезапуска
        val activityPendingIntent = PendingIntent.getActivity(this, 0,
             Intent(this, MainMenuActivity::class.java), 0)*/
+
         val builder = NotificationCompat.Builder(this)
+            /*.setSmallIcon(R.drawable.ic_camera)
+            .setCustomBigContentView(remoteViews)*/
+            .setColor(ContextCompat.getColor(this, R.color.pink))
             .addAction(
                 R.drawable.ic_exit, getString(R.string.remove_location_updates),
                 servicePendingIntent)
@@ -137,13 +181,14 @@ class LocationUpdateService : Service() {
             .setSmallIcon(R.drawable.ic_camera)
             .setTicker(coordinationText)
             .setWhen(System.currentTimeMillis())
-
         // Set the Channel ID for Android O.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId(CHANNEL_ID) // Channel ID
         }
         return builder.build()
     }
+
+
 
 
 
@@ -176,7 +221,6 @@ class LocationUpdateService : Service() {
     }
 
     fun requestLocationUpdates() {
-        Log.i(TAG, "Requesting location updates")
         setRequestingLocationUpdates(this, true)
       /*  startService(Intent(applicationContext, LocationUpdateService::class.java))*/
         try {
@@ -184,21 +228,19 @@ class LocationUpdateService : Service() {
                 mLocationCallback, Looper.myLooper())
         } catch (unlikely: SecurityException) {
             setRequestingLocationUpdates(this, false)
-            Log.e(TAG, "Lost location permission. Could not request updates. $unlikely")
         }
     }
 
     fun removeLocationUpdates() {
-        Log.i(TAG, "Removing location updates")
         try {
             mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
             MapUtils.setRequestingLocationUpdates(this, false)
             stopSelf()
         } catch (unlikely: SecurityException) {
             MapUtils.setRequestingLocationUpdates(this, true)
-            Log.e(TAG, "Lost location permission. Could not remove updates. $unlikely")
         }
     }
+
 
     companion object {
         private val UPDATE_INTERVAL: Long = 4000

@@ -37,4 +37,6 @@
     <string name="base_url">https://maps.googleapis.com</string>
 
     <string name="location_updated">Location Updated: %1$s</string>
+    <string name="cameraString">Камера</string>
+    <string name="pushMessageString">Обмеження:</string>
 </resources>

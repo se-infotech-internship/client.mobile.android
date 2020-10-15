@@ -296,7 +296,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun drawCamerasOnMap(googleMap:GoogleMap){
-        camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(requireActivity()))
+        camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(requireContext()))
 
         var bitmap: BitmapDescriptor?
         for (cameraItem in camerasList) {

@@ -42,6 +42,10 @@ class LocationUpdateService : Service() {
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
     private var beepHelper: BeepHelper? = null
+    private var cameraId: Int = -1
+    private var address: String = ""
+    private var distanceToCamera : String = ""
+    private var speedLimit: String = ""
 
 
 
@@ -142,19 +146,51 @@ class LocationUpdateService : Service() {
 
     private fun getNotification(): Notification? {
         val intent = Intent(this, LocationUpdateService::class.java)
-        val coordinationText: CharSequence = mLocation?.longitude.toString() + " " + mLocation?.latitude.toString()
-
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true)
 
-        val servicePendingIntent = PendingIntent.getService(this, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT)
+        var notification : Notification? = null
+
+  /*      val servicePendingIntent = PendingIntent.getService(this, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT)*/
+
+        for ( i in camerasList.indices) {
+            val cameraItem = camerasList[i]
+            val endPoint = Location("Camera")
+            endPoint.latitude = cameraItem.lat
+            endPoint.longitude = cameraItem.lon
+            var distance = mLocation!!.distanceTo(endPoint).toDouble()
 
 
+            distanceToCamera = "Відстань до камери: "+distance.roundToInt().toString() + " м"
+            speedLimit = cameraItem.speed.toString() + " км/г"
+            address = cameraItem.address
 
 
+            beepHelper = BeepHelper()
+            if (distance <= 200) {
+                notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper!!.beep(100)
+            }
+            else if (distance <= 400) {
+                notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper!!.beep(500)
+            }
+            else if (distance <= 700) {
+                notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper!!.beep(1000)
+                cameraId = i
+            }
+            else if (distance >= 700 && cameraId==i){
+                beepHelper=null
+                notification = null
+                cameraId = -1
+            }
+        }
 
-
-
+        if (notification==null) {
+            notification = getNotificationWithInfo("","","")
+        }
+        return notification
 
 
 
@@ -168,9 +204,9 @@ class LocationUpdateService : Service() {
        val activityPendingIntent = PendingIntent.getActivity(this, 0,
             Intent(this, MainMenuActivity::class.java), 0)*/
 
-        val builder = NotificationCompat.Builder(this)
-            /*.setSmallIcon(R.drawable.ic_camera)
-            .setCustomBigContentView(remoteViews)*/
+        /*val builder = NotificationCompat.Builder(this)
+            *//*.setSmallIcon(R.drawable.ic_camera)
+            .setCustomBigContentView(remoteViews)*//*
             .setColor(ContextCompat.getColor(this, R.color.pink))
             .addAction(
                 R.drawable.ic_exit, getString(R.string.remove_location_updates),
@@ -180,6 +216,33 @@ class LocationUpdateService : Service() {
             .setPriority(Notification.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_camera)
             .setTicker(coordinationText)
+            .setWhen(System.currentTimeMillis())
+        // Set the Channel ID for Android O.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(CHANNEL_ID) // Channel ID
+        }*/
+        //return builder.build()
+    }
+
+    fun getNotificationWithInfo(distanceToCamera : String, speedLimit : String,
+            address : String) : Notification?{
+
+        val intent = Intent(this, LocationUpdateService::class.java)
+        val servicePendingIntent = PendingIntent.getService(this, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val builder = NotificationCompat.Builder(this)
+            /*.setSmallIcon(R.drawable.ic_camera)
+            .setCustomBigContentView(remoteViews)*/
+            .setColor(ContextCompat.getColor(this, R.color.pink))
+       /*     .addAction(
+                R.drawable.ic_exit, getString(R.string.remove_location_updates),
+                servicePendingIntent)*/
+            .setContentText(distanceToCamera)
+            .setOngoing(true)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setSmallIcon(R.drawable.ic_camera)
+            .setTicker(speedLimit)
             .setWhen(System.currentTimeMillis())
         // Set the Channel ID for Android O.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

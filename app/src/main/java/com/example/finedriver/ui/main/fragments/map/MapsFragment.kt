@@ -60,7 +60,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private var currentLon : Double = 30.5234
     private var currentLat : Double = 50.4494
-    private var userSpeed : String = "0 км/г"
 
     private var destinationAddress : String = ""
     private var destinationLon : Double = 0.0

@@ -19,7 +19,7 @@ class MapViewModel : ViewModel() {
     }
 
     fun getCameraList(activity: Activity):List<CameraItem>{
-        var jsonString = getStringFromJsonFile(activity)
+        val jsonString = getStringFromJsonFile(activity)
         return parseJsonString(jsonString)
     }
 

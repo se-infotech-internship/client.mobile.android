@@ -1,14 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.fragments.FinesFragment">
+    android:layout_height="212dp"
+    android:layout_marginTop="20dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fine_layout_head"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="32dp"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/eab_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fine_text"
+            android:layout_marginStart="20dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ЕАВ/ 245686539" />
+
+        <TextView
+            android:id="@+id/fine_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="23dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#219653"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Сплачено" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="11dp"
+            android:layout_height="7dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/ic_fine_open"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_head"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fine_layout_head" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fine_layout_body"
+        android:layout_width="match_parent"
+        android:layout_height="127dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/article_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/fine_text"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Ст. 122" />
+
+        <TextView
+            android:id="@+id/article_text"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/fine_text"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/article_number"
+            tools:text="Перевищення встановлених обмежень руху, проїзд на забороненний сигнал регулювання " />
+
+        <TextView
+            android:id="@+id/data_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fines_data_labeel"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:textColor="#828282"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/article_text"
+            tools:text="Дата:" />
+
+        <TextView
+            android:id="@+id/data_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#828282"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/article_text"
+            tools:text="28.09.2020" />
+
+        <TextView
+            android:id="@+id/car_model_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fines_car_model"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="2dp"
+            android:textColor="#828282"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/data_label"
+            tools:text="Марка авто:" />
+
+        <TextView
+            android:id="@+id/car_model_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="2dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#828282"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/data_text"
+            tools:text="Moskvich 2141" />
+
+        <TextView
+            android:id="@+id/car_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fines_car_number"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="2dp"
+            android:textColor="#828282"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/car_model_label"
+            tools:text="Номерний знак:" />
+
+        <TextView
+            android:id="@+id/car_number_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="2dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#828282"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/car_model_text"
+            tools:text="АА 2233 AЖ" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_body"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fine_layout_body" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fine_layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fine_amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fine_text"
+            android:layout_marginStart="20dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Сума штрафу" />
+
+        <TextView
+            android:id="@+id/fine_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="23dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#219653"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="456 грн." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="#828282"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fine_layout_bottom"
+        tools:text="15:18" />
+
+</LinearLayout>

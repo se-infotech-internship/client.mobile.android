@@ -4,18 +4,17 @@ package com.example.finedriver.ui.main.fragments.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ComponentName
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.ServiceConnection
-import android.content.SharedPreferences
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Gravity
@@ -24,10 +23,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import com.example.finedriver.BeepHelper
 import com.example.finedriver.R
 import com.example.finedriver.data.cameraData.CameraRepository
 import com.example.finedriver.data.cameraData.model.CameraItem
@@ -39,16 +41,20 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
-import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
@@ -65,17 +71,24 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var destinationLon : Double = 0.0
     private var destinationLat : Double = 0.0
 
+    private var myReceiver: MyReceiver? = null
+    private var userSpeed : String = "0 км/г"
+    private var beepHelper: BeepHelper? = null
+    private var cameraId: Int = -1
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myReceiver = MyReceiver()
         fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
         if (MapUtils.requestingLocationUpdates(activity)) {
             if (!isPermissionGranted()) {
                 enableMyLocation()
             }
         }
+
 
     }
 
@@ -125,6 +138,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(myReceiver!!,
+            IntentFilter(LocationUpdateService.ACTION_BROADCAST)
+        )
+    }
+
+    override fun onPause() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(myReceiver!!)
+        super.onPause()
+    }
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -140,15 +165,23 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         map.setOnMapClickListener(
             object : OnMapClickListener {
                 override fun onMapClick(latLng: LatLng) {
-                    map.clear()
-                    drawCamerasOnMap(map)
-                    map.isTrafficEnabled = false
-                    val currentLocation = "$currentLat,$currentLon"
-                    val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
+                    map_message_layout.visibility = View.INVISIBLE
+                    to_menu_button.show()
+                    find_location_button.show()
+                    find_location_searchView.visibility = View.INVISIBLE
 
-                    buildRoute(currentLocation, destination)
                 }
             })
+
+        map.setOnMapLongClickListener(OnMapLongClickListener { latLng ->
+            map.clear()
+            drawCamerasOnMap(map)
+            map.isTrafficEnabled = false
+            val currentLocation = "$currentLat,$currentLon"
+            val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
+
+            buildRoute(currentLocation, destination)
+        })
     }
 
 
@@ -181,19 +214,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-/*    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray) {
-
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
-                enableMyLocation()
-            }
-        }
-    }*/
-
-
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         enableMyLocation()
@@ -208,6 +228,63 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 }
             }
     }
+
+    private inner class MyReceiver : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val location = intent.getParcelableExtra<Location>(LocationUpdateService.EXTRA_LOCATION)
+            if (location != null) {
+                currentLon = location.longitude
+                currentLat = location.latitude
+
+                userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
+                speedTextView.text = userSpeed
+
+                /* for ( cameraItem in camerasList) {*/
+                for ( i in camerasList.indices) {
+                    val cameraItem = camerasList[i]
+                    val endPoint = Location("Camera")
+                    endPoint.latitude = cameraItem.lat
+                    endPoint.longitude = cameraItem.lon
+                    var distance = location.distanceTo(endPoint).toDouble()
+
+
+
+                    if (distance <= 200) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(100)
+                    }
+                    else if (distance <= 400) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(500)
+                    }
+                    else if (distance <= 700) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(1000)
+                        cameraId = i
+
+                    }
+                    else if (distance <= 800){
+                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
+                        address_text.text = cameraItem.address
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        map_message_layout.visibility = View.VISIBLE
+                        to_menu_button.hide()
+                        find_location_button.hide()
+                    }
+                    else if (distance >= 700 && cameraId==i){
+                        beepHelper=null
+                        map_message_layout.visibility = View.INVISIBLE
+                        cameraId = -1
+                    }
+                }
+            }
+        }
+    }
+
 
 
     private val myLocationClickListener: View.OnClickListener = View.OnClickListener { view ->

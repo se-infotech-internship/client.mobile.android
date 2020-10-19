@@ -33,7 +33,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     private var mService: LocationUpdateService? = null
     private var mBound = false
     private lateinit var mServiceConnection: ServiceConnection
-    private var myReceiver: MyReceiver? = null
+    //private var myReceiver: MyReceiver? = null
     private var userSpeed : String = "0 км/г"
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
@@ -46,7 +46,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
-        myReceiver = MyReceiver()
+        //myReceiver = MyReceiver()
         camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(this))
 
         /*if (!checkNotificationPermissions()) {
@@ -84,7 +84,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         startService(Intent(applicationContext, LocationUpdateService::class.java))
     }
 
-    override fun onResume() {
+/*    override fun onResume() {
         super.onResume()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver!!,
@@ -94,7 +94,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     override fun onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver!!)
         super.onPause()
-    }
+    }*/
 
     override fun onStop() {
         if (mBound) {
@@ -122,24 +122,6 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         }
     }
 
-/*    private fun checkNotificationPermissions(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-    }
-
-
-    private fun requestNotificationPermission() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-
-        if (!shouldProvideRationale) {
-            ActivityCompat.requestPermissions(this@MainMenuActivity, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY),
-                NOTIFICATION_PERMISSION_CODE)
-
-        }
-
-    }*/
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -166,6 +148,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     }
 
 
+/*
     private inner class MyReceiver : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context, intent: Intent) {
@@ -174,9 +157,9 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                 userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
                 speedTextView.text = userSpeed
 
+               */
+/* for ( cameraItem in camerasList) {*//*
 
-
-               /* for ( cameraItem in camerasList) {*/
                 for ( i in camerasList.indices) {
                     val cameraItem = camerasList[i]
                     val endPoint = Location("Camera")
@@ -197,15 +180,19 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                         beepHelper!!.beep(500)
                     }
                     else if (distance <= 700) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(1000)
-
                         cameraId = i
+
+                    }
+                    else if (distance <= 800){
                         speed_limit_text.text = cameraItem.speed.toString() + " км/г"
                         address_text.text = cameraItem.address
                         distance_text.text = distance.roundToInt().toString() + " м"
                         map_message_layout.visibility = View.VISIBLE
-
+                        to_menu_button.hide()
+                        find_location_button.hide()
                     }
                     else if (distance >= 700 && cameraId==i){
                         beepHelper=null
@@ -216,6 +203,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             }
         }
     }
+*/
 
     companion object {
         private val TAG = MainMenuActivity::class.java.simpleName

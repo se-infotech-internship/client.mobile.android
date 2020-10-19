@@ -29,9 +29,6 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
     private val cameraClickListener: View.OnClickListener = View.OnClickListener { view ->
         findNavController().navigate(R.id.action_mainMenyFragment_to_cameraListFragment);
     }
-    private val messageClickListener: View.OnClickListener = View.OnClickListener { view ->
-        findNavController().navigate(R.id.action_mainMenyFragment_to_messagesFragment);
-    }
     private val profileClickListener: View.OnClickListener = View.OnClickListener { view ->
         findNavController().navigate(R.id.action_mainMenyFragment_to_userProfileFragment);
     }
@@ -50,7 +47,6 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
         mapLayout.setOnClickListener(mapClickListener)
         finesLayout.setOnClickListener(finesClickListener)
         cameraLayout.setOnClickListener(cameraClickListener)
-        messageLayout.setOnClickListener(messageClickListener)
         profileLayout.setOnClickListener(profileClickListener)
         settingsLayout.setOnClickListener(settingsClickListener)
         exitLayout.setOnClickListener(exitClickListener)

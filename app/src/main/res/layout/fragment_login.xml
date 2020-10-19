@@ -96,11 +96,11 @@
         android:id="@+id/imageView2"
         android:layout_width="184dp"
         android:layout_height="184dp"
-        android:layout_marginBottom="175dp"
         android:src="@drawable/ic_login_logo"
         app:layout_constraintBottom_toTopOf="@+id/googleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,6 +49,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/divider_map"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapLayout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cameraLayout"
         android:layout_width="match_parent"
@@ -85,8 +94,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher_round" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_camera"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/finesLayout"
@@ -143,57 +160,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/messageLayout"
+    <View
+        android:id="@+id/divider_fines"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="vertical"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraLayout">
-
-        <TextView
-            android:id="@+id/message_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:text="@string/message_text"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/message_item"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Повідомлення" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/message_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_message"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:id="@+id/message_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            tools:text="12" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/finesLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileLayout"
@@ -203,7 +177,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageLayout">
+        app:layout_constraintTop_toBottomOf="@+id/cameraLayout">
 
         <TextView
             android:id="@+id/profile_text"
@@ -212,8 +186,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="8dp"
             android:maxLines="1"
-            android:textColor="@color/black"
             android:text="@string/profile_text"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profile_item"
@@ -232,8 +206,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher_round" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_profile"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsLayout"
@@ -275,6 +257,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/divider_settings"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsLayout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exitLayout"
         android:layout_width="match_parent"
@@ -313,7 +304,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@mipmap/ic_launcher_round" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_exit"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exitLayout" />
 
     <ImageView
         android:id="@+id/imageView"

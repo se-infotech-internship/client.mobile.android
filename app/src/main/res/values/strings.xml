@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">FineDriver</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Електронна пошта</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Зареєструватись</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_main_meny">FullscreenActivity</string>
+    <string name="Registration">Зареєструватись за допомогою...</string>
+    <string name="or">або</string>
+
+    <!-- Strings related to main menu -->
+    <string name="hello_blank_fragment">Зразок</string>
+    <string name="map_text">Мапа</string>
+    <string name="fines_text">Штрафи</string>
+    <string name="camera_text">Перелік відеокамер</string>
+    <string name="message_text">Повідомлення</string>
+    <string name="profile_text">Профіль користувача</string>
+    <string name="settings">Налаштування додатку</string>
+    <string name="exit_text">Вихід</string>
+
+
+    <!-- Strings related to sevice -->
+    <string name="remove_location_updates">Припинити відстеження</string>
+
+
+    <!-- Strings related to map -->
+    <string name="map_speed_text">Ваша швидкість:</string>
+    <string name="speed_text">0 км/г</string>
+    <string name="map_search">Пошук</string>
+
+    <string name="base_url">https://maps.googleapis.com</string>
+
+    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="cameraString">Камера</string>
+    <string name="pushMessageString">Обмеження:</string>
+</resources>

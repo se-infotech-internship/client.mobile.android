@@ -139,7 +139,11 @@ class LocationUpdateService : Service() {
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 
         if (serviceIsRunningInForeground(this)) {
-            mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+            val notig= getNotification()
+            notig?.let {
+                mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+
+            }
         }
     }
 
@@ -152,7 +156,7 @@ class LocationUpdateService : Service() {
 
         var notification : Notification? = null
 
-       /* val servicePendingIntent = PendingIntent.getService(this, 0, intent,
+        /*val servicePendingIntent = PendingIntent.getService(this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT)*/
 
         for ( i in camerasList.indices) {
@@ -191,9 +195,9 @@ class LocationUpdateService : Service() {
             }
         }
 
-        if (notification==null) {
+        /*if (notification==null) {
             notification = getNotificationWithInfo("","","")
-        }
+        }*/
         return notification
 
     }
@@ -210,9 +214,9 @@ class LocationUpdateService : Service() {
             /*.setSmallIcon(R.drawable.ic_camera)
             .setCustomBigContentView(remoteViews)*/
             .setColor(ContextCompat.getColor(this, R.color.pink))
-            /*     .addAction(
+                 .addAction(
                      R.drawable.ic_exit, getString(R.string.remove_location_updates),
-                     servicePendingIntent)*/
+                     servicePendingIntent)
             .setContentText(distanceToCamera)
             .setOngoing(true)
             .setPriority(Notification.PRIORITY_HIGH)

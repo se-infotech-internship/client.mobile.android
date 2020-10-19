@@ -12,6 +12,7 @@
         android:id="@+id/fine_top"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:elevation="24dp"
         android:background="@color/fines_top_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

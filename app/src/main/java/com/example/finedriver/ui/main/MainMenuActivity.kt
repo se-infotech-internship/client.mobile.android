@@ -37,7 +37,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     private var userSpeed : String = "0 км/г"
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
-    private var beepHelper: BeepHelper? = null
+    //private var beepHelper: BeepHelper? = null
     private var cameraId: Int = -1
 
 

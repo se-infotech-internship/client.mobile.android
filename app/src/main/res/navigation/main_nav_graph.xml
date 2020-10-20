@@ -51,15 +51,6 @@
             app:destination="@id/mainMenyFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.finedriver.ui.main.fragments.SettingsFragment"
-        tools:layout="@layout/fragment_settings"
-        android:label="fragment_settings" >
-        <action
-            android:id="@+id/action_settingsFragment_to_mainMenyFragment"
-            app:destination="@id/mainMenyFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/mainMenyFragment"
         android:name="com.example.finedriver.ui.main.fragments.MainMenuFragment"
         tools:layout="@layout/fragment_main_menu"
@@ -77,9 +68,6 @@
             android:id="@+id/action_mainMenyFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <action
-            android:id="@+id/action_mainMenyFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
             android:id="@+id/action_mainMenyFragment_to_exitFragment"
             app:destination="@id/exitFragment" />
         <action
@@ -93,5 +81,16 @@
         <action
             android:id="@+id/action_finesFragment_to_mainMenyFragment"
             app:destination="@id/mainMenyFragment" />
+        <action
+            android:id="@+id/action_finesFragment_to_webFragment"
+            app:destination="@id/webFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webFragment"
+        android:name="com.example.finedriver.ui.main.fragments.fines.WebFragment"
+        android:label="WebFragment" >
+        <action
+            android:id="@+id/action_webFragment_to_finesFragment"
+            app:destination="@id/finesFragment" />
     </fragment>
 </navigation>

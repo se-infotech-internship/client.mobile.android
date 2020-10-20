@@ -147,64 +147,6 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         }
     }
 
-
-/*
-    private inner class MyReceiver : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            val location = intent.getParcelableExtra<Location>(LocationUpdateService.EXTRA_LOCATION)
-            if (location != null) {
-                userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
-                speedTextView.text = userSpeed
-
-               */
-/* for ( cameraItem in camerasList) {*//*
-
-                for ( i in camerasList.indices) {
-                    val cameraItem = camerasList[i]
-                    val endPoint = Location("Camera")
-                    endPoint.latitude = cameraItem.lat
-                    endPoint.longitude = cameraItem.lon
-                    var distance = location.distanceTo(endPoint).toDouble()
-
-
-
-                    if (distance <= 200) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(100)
-                    }
-                    else if (distance <= 400) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(500)
-                    }
-                    else if (distance <= 700) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(1000)
-                        cameraId = i
-
-                    }
-                    else if (distance <= 800){
-                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
-                        address_text.text = cameraItem.address
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        map_message_layout.visibility = View.VISIBLE
-                        to_menu_button.hide()
-                        find_location_button.hide()
-                    }
-                    else if (distance >= 700 && cameraId==i){
-                        beepHelper=null
-                        map_message_layout.visibility = View.INVISIBLE
-                        cameraId = -1
-                    }
-                }
-            }
-        }
-    }
-*/
-
     companion object {
         private val TAG = MainMenuActivity::class.java.simpleName
         private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34

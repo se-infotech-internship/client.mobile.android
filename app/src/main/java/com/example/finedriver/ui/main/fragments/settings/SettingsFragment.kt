@@ -1,4 +1,4 @@
-package com.example.finedriver.ui.main.fragments
+package com.example.finedriver.ui.main.fragments.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

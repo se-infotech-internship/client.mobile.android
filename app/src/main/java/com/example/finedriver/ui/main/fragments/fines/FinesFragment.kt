@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.finedriver.R
+import kotlinx.android.synthetic.main.fragment_full_fines_ayout.*
 
 
-/**
- * A fragment representing a list of Items.
- */
 class FinesFragment : Fragment() {
 
     private var columnCount = 1
+    private val finesViewModel = FinesViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class FinesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_fines_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_full_fines_ayout, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -39,18 +39,22 @@ class FinesFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                //adapter = MyItemRecyclerViewAdapter(DummyContent.ITEMS)
+                adapter = MyItemRecyclerViewAdapter(finesViewModel.getFinesList(requireContext()))
             }
         }
         return view
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        findFinesButton.setOnClickListener(payFinesClickListener)
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             FinesFragment().apply {
@@ -58,5 +62,9 @@ class FinesFragment : Fragment() {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
+    }
+
+    private val payFinesClickListener: View.OnClickListener = View.OnClickListener { view ->
+        findNavController().navigate(R.id.action_finesFragment_to_webFragment)
     }
 }

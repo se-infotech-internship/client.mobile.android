@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_nav_graph"
+    app:startDestination="@id/settingsFragment2">
+
+    <fragment
+        android:id="@+id/settingsFragment2"
+        android:name="com.example.finedriver.ui.main.fragments.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment2_to_messageSettingsFragment"
+            app:destination="@id/messageSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment2_to_cameraSettingsFragment"
+            app:destination="@id/cameraSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment2_to_finesSettingsFragment"
+            app:destination="@id/finesSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finesSettingsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.settings.FinesSettingsFragment"
+        android:label="FinesSettingsFragment" >
+        <action
+            android:id="@+id/action_finesSettingsFragment_to_inspectionSettingsFragment"
+            app:destination="@id/inspectionSettingsFragment" />
+        <action
+            android:id="@+id/action_finesSettingsFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/inspectionSettingsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.settings.InspectionSettingsFragment"
+        android:label="InspectionSettingsFragment" >
+        <action
+            android:id="@+id/action_inspectionSettingsFragment_to_finesSettingsFragment"
+            app:destination="@id/finesSettingsFragment" />
+        <action
+            android:id="@+id/action_inspectionSettingsFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraSettingsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.settings.CameraSettingsFragment"
+        android:label="CameraSettingsFragment" >
+        <action
+            android:id="@+id/action_cameraSettingsFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/messageSettingsFragment"
+        android:name="com.example.finedriver.ui.main.fragments.settings.MessageSettingsFragment"
+        android:label="MessageSettingsFragment" >
+        <action
+            android:id="@+id/action_messageSettingsFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+</navigation>

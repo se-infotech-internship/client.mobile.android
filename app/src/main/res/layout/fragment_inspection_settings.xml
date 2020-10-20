@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_head_text"
+            android:text="@string/fines_settings_head"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -29,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="НАЛАШТУВАННЯ" />
+            />
 
         <Button
             android:id="@+id/fines_list_back_button"
@@ -62,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fine_top">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/message_settings_layout"
+            android:id="@+id/every_day_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/message_settings_text"
+                android:text="@string/every_day"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -87,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_settings_forvard"
+                android:src="@drawable/ic_inspection"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -101,23 +100,23 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_settings_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/every_day_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/camera_settings_layout"
+            android:id="@+id/every_week_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_settings_layout">
+            app:layout_constraintTop_toBottomOf="@+id/every_day_layout">
 
             <TextView
-                android:id="@+id/camera_text"
+                android:id="@+id/every_week_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/camera_settings_text"
+                android:text="@string/every_week"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -130,7 +129,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_settings_forvard"
+                android:src="@drawable/ic_inspection"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -144,23 +144,23 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera_settings_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/every_week_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/fines_settings_layout"
+            android:id="@+id/every_month_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera_settings_layout">
+            app:layout_constraintTop_toBottomOf="@+id/every_week_layout">
 
             <TextView
-                android:id="@+id/fines_settings_text"
+                android:id="@+id/every_month_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/fines_settings_text"
+                android:text="@string/every_month"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -173,7 +173,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_settings_forvard"
+                android:src="@drawable/ic_inspection"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -187,23 +188,23 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fines_settings_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/every_month_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/reminders_settings_layout"
+            android:id="@+id/every_year_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fines_settings_layout">
+            app:layout_constraintTop_toBottomOf="@+id/every_month_layout">
 
             <TextView
-                android:id="@+id/reminders_settings_text"
+                android:id="@+id/every_year_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/reminders_settings_text"
+                android:text="@string/every_year"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -216,7 +217,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_settings_forvard"
+                android:src="@drawable/ic_inspection"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -230,23 +232,23 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reminders_settings_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/every_year_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/about_layout"
+            android:id="@+id/never_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reminders_settings_layout">
+            app:layout_constraintTop_toBottomOf="@+id/every_year_layout">
 
             <TextView
                 android:id="@+id/about_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/about_text"
+                android:text="@string/never"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -259,7 +261,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_settings_forvard"
+                android:src="@drawable/ic_inspection"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -273,7 +276,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/never_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

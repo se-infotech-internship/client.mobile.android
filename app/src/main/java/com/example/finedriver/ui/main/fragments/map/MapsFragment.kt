@@ -89,6 +89,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
 
 
+
     }
 
     override fun onCreateView(
@@ -105,7 +106,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = SupportMapFragment.newInstance()
         childFragmentManager.beginTransaction().add(R.id.mapContainer, mapFragment).commit()
         mapFragment?.getMapAsync(this)
-
 
         my_location_button.setOnClickListener(myLocationClickListener)
         find_location_button.setOnClickListener(findLocationClickListener)
@@ -247,26 +247,27 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     endPoint.longitude = cameraItem.lon
                     val distance = location.distanceTo(endPoint).toDouble()
 
+
                     if (distance <= 200) {
-                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
+                        distance_text.text = distance.roundToInt().toString() + " м"
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(100)
                     }
                     else if (distance <= 400) {
-                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
+                        distance_text.text = distance.roundToInt().toString() + " м"
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(500)
                     }
                     else if (distance <= 700) {
-                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
+                        distance_text.text = distance.roundToInt().toString() + " м"
                         address_text.text = cameraItem.address
-                        speed_limit_text.text = cameraItem.speed.toString() + R.string.map_km_h
+                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(1000)
                         cameraId = i
-                        to_menu_button.hide()
-                        find_location_button.hide()
                         if (isPushShow) {
+                            to_menu_button.hide()
+                            find_location_button.hide()
                             map_message_layout.visibility = View.VISIBLE
                             isPushShow = false
                         }
@@ -336,7 +337,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             addresses = geocoder.getFromLocationName(address, 1)
 
             if (addresses.isNotEmpty()) {
-                val addr: Address = addresses.get(0)
+                val addr: Address = addresses[0]
                 destinationLon = addr.longitude
                 destinationLat = addr.latitude
             }

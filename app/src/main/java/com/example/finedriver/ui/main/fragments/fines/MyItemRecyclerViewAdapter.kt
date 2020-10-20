@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.finedriver.R
+import com.example.finedriver.data.finesData.model.FinesItem
 
-import com.example.finedriver.ui.main.fragments.fines.dummy.DummyContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
-    private val values: List<DummyItem>
+    private val values: List<FinesItem>
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +26,7 @@ class MyItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
        /* holder.idView.text = item.id*/
-        holder.contentView.text = item.content
+        //holder.contentView.text = item.
     }
 
     override fun getItemCount(): Int = values.size

@@ -108,7 +108,6 @@
             android:layout_marginStart="34dp"
             android:layout_marginTop="0dp"
             android:paddingStart="6dp"
-            android:text="@string/speed_text"
             android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exit_text"

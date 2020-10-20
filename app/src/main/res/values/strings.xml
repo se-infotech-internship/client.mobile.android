@@ -31,8 +31,10 @@
 
     <!-- Strings related to map -->
     <string name="map_speed_text">Ваша швидкість:</string>
-    <string name="speed_text">0 км/г</string>
     <string name="map_search">Пошук</string>
+    <string name="map_meters"> м</string>
+    <string name="map_speed_limit">   Обмеження: </string>
+    <string name="map_km_h">   Обмеження: </string>
 
     <string name="base_url">https://maps.googleapis.com</string>
 

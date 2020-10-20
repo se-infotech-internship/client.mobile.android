@@ -15,8 +15,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +29,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.example.finedriver.BeepHelper
 import com.example.finedriver.R
-import com.example.finedriver.data.cameraData.CameraRepository
 import com.example.finedriver.data.cameraData.model.CameraItem
 import com.example.finedriver.data.routeData.RetrofitClient
 import com.example.finedriver.data.routeData.model.DirectionResponses
@@ -61,7 +58,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var cameraRepository = CameraRepository()
+    private var mapViewModel = MapViewModel()
     private lateinit var camerasList : List<CameraItem>
     private lateinit var map: GoogleMap
     private var currentLon : Double = 30.5234
@@ -75,6 +72,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var userSpeed : String = "0 км/г"
     private var beepHelper: BeepHelper? = null
     private var cameraId: Int = -1
+    private var moveCounter: Int = 0
+    private var isPushShow: Boolean = true
 
 
 
@@ -162,18 +161,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         getLastLocation()
         moveToMyLocation()
 
-        map.setOnMapClickListener(
-            object : OnMapClickListener {
-                override fun onMapClick(latLng: LatLng) {
-                    map_message_layout.visibility = View.INVISIBLE
-                    to_menu_button.show()
-                    find_location_button.show()
-                    find_location_searchView.visibility = View.INVISIBLE
+        map.setOnMapClickListener {
+            map_message_layout.visibility = View.INVISIBLE
+            to_menu_button.show()
+            find_location_button.show()
+            find_location_searchView.visibility = View.INVISIBLE
+        }
 
-                }
-            })
-
-        map.setOnMapLongClickListener(OnMapLongClickListener { latLng ->
+        map.setOnMapLongClickListener { latLng ->
             map.clear()
             drawCamerasOnMap(map)
             map.isTrafficEnabled = false
@@ -181,7 +176,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
 
             buildRoute(currentLocation, destination)
-        })
+        }
     }
 
 
@@ -236,6 +231,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             if (location != null) {
                 currentLon = location.longitude
                 currentLat = location.latitude
+                if (moveCounter==0) {
+                    moveToMyLocation()
+                    moveCounter++
+                }
 
                 userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
                 speedTextView.text = userSpeed
@@ -246,39 +245,38 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     val endPoint = Location("Camera")
                     endPoint.latitude = cameraItem.lat
                     endPoint.longitude = cameraItem.lon
-                    var distance = location.distanceTo(endPoint).toDouble()
-
-
+                    val distance = location.distanceTo(endPoint).toDouble()
 
                     if (distance <= 200) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
+                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(100)
                     }
                     else if (distance <= 400) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
+                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(500)
                     }
                     else if (distance <= 700) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
+                        distance_text.text = distance.roundToInt().toString() + R.string.map_meters
+                        address_text.text = cameraItem.address
+                        speed_limit_text.text = cameraItem.speed.toString() + R.string.map_km_h
                         beepHelper = BeepHelper()
                         beepHelper!!.beep(1000)
                         cameraId = i
-
-                    }
-                    else if (distance <= 800){
-                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
-                        address_text.text = cameraItem.address
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        map_message_layout.visibility = View.VISIBLE
                         to_menu_button.hide()
                         find_location_button.hide()
+                        if (isPushShow) {
+                            map_message_layout.visibility = View.VISIBLE
+                            isPushShow = false
+                        }
+
                     }
                     else if (distance >= 700 && cameraId==i){
                         beepHelper=null
                         map_message_layout.visibility = View.INVISIBLE
                         cameraId = -1
+                        isPushShow = true
                     }
                 }
             }
@@ -287,12 +285,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
 
-    private val myLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+    private val myLocationClickListener: View.OnClickListener = View.OnClickListener {
         getLastLocation()
         moveToMyLocation()
     }
 
-    private val findLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+    private val findLocationClickListener: View.OnClickListener = View.OnClickListener {
         if (find_location_searchView.visibility != View.VISIBLE) {
             find_location_searchView.visibility = View.VISIBLE
             find_location_button.hide()
@@ -315,11 +313,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     response: Response<DirectionResponses>
                 ) {
                     drawPolyline(response)
-                    Log.d("Все отлично!", response.message())
                 }
 
                 override fun onFailure(call: Call<DirectionResponses>, t: Throwable) {
-                    Log.e("Все плохо!!!!", t.localizedMessage)
                 }
             })
     }
@@ -329,13 +325,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun moveToMyLocation() {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLon.let {
-            currentLat.let { it1 ->
-                LatLng(
-                    it1, it
-                )
-            }
-        }, 16f))
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLat, currentLon), 16f))
     }
 
     private fun getCoordinationByAddress(address: String) {
@@ -356,7 +346,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 toast.show()
             }
         } catch (e: IOException) {
-            Log.e("MapsActivity", e.localizedMessage)
         }
     }
 
@@ -372,7 +361,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun drawCamerasOnMap(googleMap:GoogleMap){
-        camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(requireContext()))
+        camerasList = mapViewModel.getCameraList(requireContext())
 
         var bitmap: BitmapDescriptor?
         for (cameraItem in camerasList) {

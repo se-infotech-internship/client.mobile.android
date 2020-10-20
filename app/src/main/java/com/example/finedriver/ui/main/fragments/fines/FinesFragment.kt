@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.finedriver.R
-import com.example.finedriver.ui.main.fragments.fines.dummy.DummyContent
+
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +39,7 @@ class FinesFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyItemRecyclerViewAdapter(DummyContent.ITEMS)
+                //adapter = MyItemRecyclerViewAdapter(DummyContent.ITEMS)
             }
         }
         return view

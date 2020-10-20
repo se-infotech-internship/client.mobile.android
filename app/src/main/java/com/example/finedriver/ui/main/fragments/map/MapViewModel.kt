@@ -1,6 +1,7 @@
 package com.example.finedriver.ui.main.fragments.map
 
 import android.app.Activity
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.finedriver.data.cameraData.CameraRepository
 import com.example.finedriver.data.cameraData.model.CameraItem
@@ -10,16 +11,16 @@ class MapViewModel : ViewModel() {
     private val repository =
         CameraRepository()
 
-    private fun getStringFromJsonFile(activity: Activity):String {
-        return repository.getStringFromJsonFile(activity)
+    private fun getStringFromJsonFile(context: Context):String {
+        return repository.getStringFromJsonFile(context)
     }
 
     private fun parseJsonString(Json:String):List<CameraItem>{
         return repository.getCamerasList(Json)
     }
 
-    fun getCameraList(activity: Activity):List<CameraItem>{
-        val jsonString = getStringFromJsonFile(activity)
+    fun getCameraList(context: Context):List<CameraItem>{
+        val jsonString = getStringFromJsonFile(context)
         return parseJsonString(jsonString)
     }
 

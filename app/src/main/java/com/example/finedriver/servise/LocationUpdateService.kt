@@ -220,7 +220,8 @@ class LocationUpdateService : Service() {
             .setContentText(distanceToCamera)
             .setOngoing(true)
             .setPriority(Notification.PRIORITY_HIGH)
-            .setSmallIcon(R.drawable.ic_camera)
+            /*.setSmallIcon(R.drawable.ic_login_logo)*/
+           /* .setLargeIcon(R.drawable.ic_big_camera)*/
             .setTicker(speedLimit)
             .setWhen(System.currentTimeMillis())
         // Set the Channel ID for Android O.

@@ -82,11 +82,12 @@
                 app:layout_constraintVertical_bias="0.513" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/every_day_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_inspection"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -125,7 +126,7 @@
                 app:layout_constraintVertical_bias="0.513" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/every_week_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -169,7 +170,7 @@
                 app:layout_constraintVertical_bias="0.513" />
 
             <ImageView
-                android:id="@+id/fines_imageView"
+                android:id="@+id/every_month_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -213,7 +214,7 @@
                 app:layout_constraintVertical_bias="0.513" />
 
             <ImageView
-                android:id="@+id/reminders_imageView"
+                android:id="@+id/every_year_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -257,7 +258,7 @@
                 app:layout_constraintVertical_bias="0.513" />
 
             <ImageView
-                android:id="@+id/about_imageView"
+                android:id="@+id/never_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"

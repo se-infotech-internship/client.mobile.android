@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/profile_imageView">
 
         <TextView
             android:id="@+id/map_text"
@@ -317,7 +317,7 @@
         app:layout_constraintTop_toBottomOf="@+id/exitLayout" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profile_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
@@ -326,5 +326,33 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_avatar" />
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        android:visibility="invisible"
+        app:contentPadding="0dp"
+        android:layout_marginTop="54dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_icon_profile"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:padding="8dp"
+            tools:src="@mipmap/ic_launcher_round" />
+
+
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

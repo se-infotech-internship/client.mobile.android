@@ -4,32 +4,31 @@ package com.example.finedriver.ui.main.fragments.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ComponentName
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.ServiceConnection
-import android.content.SharedPreferences
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
-import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import com.example.finedriver.BeepHelper
 import com.example.finedriver.R
-import com.example.finedriver.data.cameraData.CameraRepository
 import com.example.finedriver.data.cameraData.model.CameraItem
 import com.example.finedriver.data.routeData.RetrofitClient
 import com.example.finedriver.data.routeData.model.DirectionResponses
@@ -39,23 +38,27 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
-import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var cameraRepository = CameraRepository()
+    private var mapViewModel = MapViewModel()
     private lateinit var camerasList : List<CameraItem>
     private lateinit var map: GoogleMap
     private var currentLon : Double = 30.5234
@@ -65,18 +68,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var destinationLon : Double = 0.0
     private var destinationLat : Double = 0.0
 
+    private var myReceiver: MyReceiver? = null
+    private var userSpeed : String = "0 км/г"
+    private var beepHelper: BeepHelper? = null
+    private var cameraId: Int = -1
+    private var moveCounter: Int = 0
+    private var isPushShow: Boolean = true
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myReceiver = MyReceiver()
         fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
-        if (MapUtils.requestingLocationUpdates(activity)) {
-            if (!isPermissionGranted()) {
-                enableMyLocation()
-            }
-        }
-
     }
 
     override fun onCreateView(
@@ -93,6 +98,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = SupportMapFragment.newInstance()
         childFragmentManager.beginTransaction().add(R.id.mapContainer, mapFragment).commit()
         mapFragment?.getMapAsync(this)
+
 
 
         my_location_button.setOnClickListener(myLocationClickListener)
@@ -127,28 +133,52 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
 
+    override fun onResume() {
+        super.onResume()
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(myReceiver!!,
+            IntentFilter(LocationUpdateService.ACTION_BROADCAST)
+        )
+    }
+
+    override fun onPause() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(myReceiver!!)
+        super.onPause()
+    }
+
+
     override fun onMapReady(googleMap: GoogleMap) {
+
         map = googleMap
 
         drawCamerasOnMap(map)
 
+        if (MapUtils.requestingLocationUpdates(activity)) {
+            if (!isPermissionGranted()) {
+                enableMyLocation()
+            }
+        }
         map.isTrafficEnabled = true
 
         getLastLocation()
         moveToMyLocation()
 
-        map.setOnMapClickListener(
-            object : OnMapClickListener {
-                override fun onMapClick(latLng: LatLng) {
-                    map.clear()
-                    drawCamerasOnMap(map)
-                    map.isTrafficEnabled = false
-                    val currentLocation = "$currentLat,$currentLon"
-                    val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
+        map.setOnMapClickListener {
+            map_message_layout.visibility = View.INVISIBLE
+            to_menu_button.show()
+            find_location_button.show()
+            find_location_searchView.visibility = View.INVISIBLE
+        }
 
-                    buildRoute(currentLocation, destination)
-                }
-            })
+        map.setOnMapLongClickListener { latLng ->
+            map.clear()
+            drawCamerasOnMap(map)
+            map.isTrafficEnabled = false
+            val currentLocation = "$currentLat,$currentLon"
+            val destination =  latLng.latitude.toString() + "," +latLng.longitude.toString()
+
+            buildRoute(currentLocation, destination)
+        }
     }
 
 
@@ -181,19 +211,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-/*    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray) {
-
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
-                enableMyLocation()
-            }
-        }
-    }*/
-
-
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         enableMyLocation()
@@ -209,13 +226,74 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
     }
 
+    private inner class MyReceiver : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onReceive(context: Context, intent: Intent) {
+            val location = intent.getParcelableExtra<Location>(LocationUpdateService.EXTRA_LOCATION)
+            if (location != null) {
+                currentLon = location.longitude
+                currentLat = location.latitude
+                if (moveCounter==0) {
+                    moveToMyLocation()
+                    moveCounter++
+                }
 
-    private val myLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+                userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
+                speedTextView.text = userSpeed
+
+                /* for ( cameraItem in camerasList) {*/
+                for ( i in camerasList.indices) {
+                    val cameraItem = camerasList[i]
+                    val endPoint = Location("Camera")
+                    endPoint.latitude = cameraItem.lat
+                    endPoint.longitude = cameraItem.lon
+                    val distance = location.distanceTo(endPoint).toDouble()
+
+
+                    if (distance <= 200) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(100)
+                    }
+                    else if (distance <= 400) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(500)
+                    }
+                    else if (distance <= 700) {
+                        distance_text.text = distance.roundToInt().toString() + " м"
+                        address_text.text = cameraItem.address
+                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
+                        beepHelper = BeepHelper()
+                        beepHelper!!.beep(1000)
+                        cameraId = i
+                        if (isPushShow) {
+                            to_menu_button.hide()
+                            find_location_button.hide()
+                            map_message_layout.visibility = View.VISIBLE
+                            isPushShow = false
+                        }
+
+                    }
+                    else if (distance >= 700 && cameraId==i){
+                        beepHelper=null
+                        map_message_layout.visibility = View.INVISIBLE
+                        cameraId = -1
+                        isPushShow = true
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    private val myLocationClickListener: View.OnClickListener = View.OnClickListener {
         getLastLocation()
         moveToMyLocation()
     }
 
-    private val findLocationClickListener: View.OnClickListener = View.OnClickListener { view ->
+    private val findLocationClickListener: View.OnClickListener = View.OnClickListener {
         if (find_location_searchView.visibility != View.VISIBLE) {
             find_location_searchView.visibility = View.VISIBLE
             find_location_button.hide()
@@ -238,11 +316,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     response: Response<DirectionResponses>
                 ) {
                     drawPolyline(response)
-                    Log.d("Все отлично!", response.message())
                 }
 
                 override fun onFailure(call: Call<DirectionResponses>, t: Throwable) {
-                    Log.e("Все плохо!!!!", t.localizedMessage)
                 }
             })
     }
@@ -252,13 +328,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun moveToMyLocation() {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLon.let {
-            currentLat.let { it1 ->
-                LatLng(
-                    it1, it
-                )
-            }
-        }, 16f))
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLat, currentLon), 16f))
     }
 
     private fun getCoordinationByAddress(address: String) {
@@ -269,7 +339,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             addresses = geocoder.getFromLocationName(address, 1)
 
             if (addresses.isNotEmpty()) {
-                val addr: Address = addresses.get(0)
+                val addr: Address = addresses[0]
                 destinationLon = addr.longitude
                 destinationLat = addr.latitude
             }
@@ -279,7 +349,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 toast.show()
             }
         } catch (e: IOException) {
-            Log.e("MapsActivity", e.localizedMessage)
         }
     }
 
@@ -295,7 +364,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun drawCamerasOnMap(googleMap:GoogleMap){
-        camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(requireContext()))
+        camerasList = mapViewModel.getCameraList(requireContext())
 
         var bitmap: BitmapDescriptor?
         for (cameraItem in camerasList) {

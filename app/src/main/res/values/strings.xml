@@ -31,12 +31,61 @@
 
     <!-- Strings related to map -->
     <string name="map_speed_text">Ваша швидкість:</string>
-    <string name="speed_text">0 км/г</string>
     <string name="map_search">Пошук</string>
+    <string name="map_meters"> м</string>
+    <string name="map_speed_limit">   Обмеження: </string>
+    <string name="map_km_h">   Обмеження: </string>
 
     <string name="base_url">https://maps.googleapis.com</string>
 
-    <string name="location_updated">Location Updated: %1$s</string>
+    <!-- Strings related to push -->
     <string name="cameraString">Камера</string>
     <string name="pushMessageString">Обмеження:</string>
+    <!-- Strings related to fine -->
+    <string name="fine_not_paid_text">СПЛАТИТИ ШТРАФ</string>
+    <string name="fine_paid_text">СУМА ШТРАФУ</string>
+    <string name="fines_data_labeel">Дата:</string>
+    <string name="fines_car_model">Марка авто:</string>
+    <string name="fines_car_number">Номерний знак:</string>
+    <string name="fines_status_bad">НЕ СПЛАЧЕНО</string>
+    <string name="fines_status_ok">СПЛАЧЕНО</string>
+    <string name="finesDescription">Перевищення встановлених обмежень руху, проїзд на забороненний сигнал регулювання</string>
+    <!-- Strings related to fines list -->
+    <string name="fines_list_head_text">ШТРАФИ</string>
+    <string name="driverLicence">ЕАВ/ 245686539</string>
+    <string name="car_model">Moskvich 2141</string>
+    <string name="fines_list_button">Пошук за реквізитами</string>
+    <!-- Strings related to settings -->
+    <string name="settings_head_text">НАЛАШТУВАННЯ</string>
+    <string name="message_settings_text">Повідомлення</string>
+    <string name="camera_settings_text">Камери</string>
+    <string name="fines_settings_text">Штрафи</string>
+    <string name="reminders_settings_text">Нагадування</string>
+    <string name="about_text">Про додаток</string>
+    <string name="message_settings_head">ПОВІДОМЛЕННЯ</string>
+    <string name="message_on_map">Повідомлення на мапі</string>
+    <string name="voice_message_text">Голосові повідомлення</string>
+    <string name="audio_warnings_text">Звукові попередження</string>
+    <string name="push_message_text">Push - повідомлення</string>
+    <string name="all_cameras_text">Відображати всі камери</string>
+    <string name="camera_settings_head">КАМЕРИ</string>
+    <string name="trucam_text">Відображати Trucam</string>
+    <string name="on_way_camera_text">Відображати камери тільки по обраному муршруту</string>
+    <string name="warning_radius_text">Радіус зони попередження</string>
+    <string name="warning_radius_meter">700 м</string>
+    <string name="fines_settings_head">Штрафи</string>
+    <string name="inspection_frequency_text">Періодичність автоматичної перевірки штрафів</string>
+    <string name="every_day">Раз на день</string>
+    <string name="every_week">Раз на тиждень</string>
+    <string name="every_month">Раз на місяць</string>
+    <string name="every_year">Раз на рік</string>
+    <string name="never">Не перевіряти</string>
+
+    <string name="server_client_id">870983878199-cc2b39qr98afhq75b1ebnkkmtsuuo9ls.apps.googleusercontent.com</string>
+    <string name="user_profile_head">ПРОФІЛЬ</string>
+    <string name="profile_name_text">Ivasik 107</string>
+    <string name="profile_email_text">v.stetsenko@gmail.com</string>
+    <string name="profile_fullname_text">Стеценко Василь Петрович</string>
+    <string name="find_fines_head">СПЛАТА ШТРАФУ</string>
+
 </resources>

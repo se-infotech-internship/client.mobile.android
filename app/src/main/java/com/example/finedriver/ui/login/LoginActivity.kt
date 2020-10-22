@@ -1,13 +1,13 @@
 package com.example.finedriver.ui.login
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
 import com.example.finedriver.R
-import com.example.finedriver.ui.login.fragments.LoginFragment
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,7 +18,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         navController = Navigation.findNavController(this, R.id.login_nav_host);
 
+
     }
+
+
 
 
 

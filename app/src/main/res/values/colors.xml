@@ -2,12 +2,13 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#787880</color>
 
 
     <color name="white">#FFFFFF</color>
     <color name="black_overlay">#66000000</color>
     <color name="black">#000000</color>
     <color name="pink">#EC1160</color>
+    <color name="fines_top_background">#2A3032</color>
 
 </resources>

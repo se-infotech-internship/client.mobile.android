@@ -108,14 +108,13 @@
             android:layout_marginStart="34dp"
             android:layout_marginTop="0dp"
             android:paddingStart="6dp"
-            android:text="@string/speed_text"
             android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exit_text"
             tools:text="65 км/г" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/volumeButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="20dp"
@@ -129,15 +128,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/map_message_layout"
-        android:layout_width="375dp"
+        android:layout_width="match_parent"
         android:layout_height="152dp"
-        android:layout_marginTop="5dp"
-        android:visibility="invisible"
         android:background="@drawable/ic_push_message"
+        android:layout_margin="5dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/to_menu_button">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/cameraText"
@@ -146,10 +145,10 @@
             android:layout_marginStart="39dp"
             android:layout_marginTop="17dp"
             android:maxLines="1"
-            android:textStyle="bold"
             android:text="@string/cameraString"
             android:textColor="@color/white"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Камера" />
@@ -174,8 +173,8 @@
             android:layout_height="28dp"
             android:layout_marginStart="39dp"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mapMessageText"
             tools:text="65 км/г" />
@@ -200,9 +199,9 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="18dp"
             android:maxLines="1"
-            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="500 м" />

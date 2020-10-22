@@ -33,11 +33,11 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     private var mService: LocationUpdateService? = null
     private var mBound = false
     private lateinit var mServiceConnection: ServiceConnection
-    private var myReceiver: MyReceiver? = null
+    //private var myReceiver: MyReceiver? = null
     private var userSpeed : String = "0 км/г"
     private var cameraRepository = CameraRepository()
     private lateinit var camerasList : List<CameraItem>
-    private var beepHelper: BeepHelper? = null
+    //private var beepHelper: BeepHelper? = null
     private var cameraId: Int = -1
 
 
@@ -46,18 +46,18 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
-        myReceiver = MyReceiver()
+        //myReceiver = MyReceiver()
         camerasList = cameraRepository.getCamerasList(cameraRepository.getStringFromJsonFile(this))
 
         /*if (!checkNotificationPermissions()) {
                 requestNotificationPermission()
         }*/
 
-        if (MapUtils.requestingLocationUpdates(this)) {
+ /*       if (MapUtils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
                 requestPermissions()
             }
-        }
+        }*/
 
         mServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -84,7 +84,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         startService(Intent(applicationContext, LocationUpdateService::class.java))
     }
 
-    override fun onResume() {
+/*    override fun onResume() {
         super.onResume()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver!!,
@@ -94,7 +94,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     override fun onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver!!)
         super.onPause()
-    }
+    }*/
 
     override fun onStop() {
         if (mBound) {
@@ -107,7 +107,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         super.onStop()
     }
 
-    private fun checkPermissions(): Boolean {
+/*    private fun checkPermissions(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
             Manifest.permission.ACCESS_FINE_LOCATION)
     }
@@ -120,24 +120,6 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             ActivityCompat.requestPermissions(this@MainMenuActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS_REQUEST_CODE)
         }
-    }
-
-/*    private fun checkNotificationPermissions(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-    }
-
-
-    private fun requestNotificationPermission() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.ACCESS_NOTIFICATION_POLICY)
-
-        if (!shouldProvideRationale) {
-            ActivityCompat.requestPermissions(this@MainMenuActivity, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY),
-                NOTIFICATION_PERMISSION_CODE)
-
-        }
-
     }*/
 
     override fun onRequestPermissionsResult(
@@ -161,58 +143,6 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                 //Displaying another toast if permission is not granted
                 Toast.makeText(this, "Разрешение отклонено!!!", Toast.LENGTH_LONG)
                     .show()
-            }
-        }
-    }
-
-
-    private inner class MyReceiver : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context, intent: Intent) {
-            val location = intent.getParcelableExtra<Location>(LocationUpdateService.EXTRA_LOCATION)
-            if (location != null) {
-                userSpeed = (location.getSpeed()*3.6).roundToInt().toString() + " км/г"
-                speedTextView.text = userSpeed
-
-
-
-               /* for ( cameraItem in camerasList) {*/
-                for ( i in camerasList.indices) {
-                    val cameraItem = camerasList[i]
-                    val endPoint = Location("Camera")
-                    endPoint.latitude = cameraItem.lat
-                    endPoint.longitude = cameraItem.lon
-                    var distance = location.distanceTo(endPoint).toDouble()
-
-
-
-                    if (distance <= 200) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(100)
-                    }
-                    else if (distance <= 400) {
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(500)
-                    }
-                    else if (distance <= 700) {
-                        beepHelper = BeepHelper()
-                        beepHelper!!.beep(1000)
-
-                        cameraId = i
-                        speed_limit_text.text = cameraItem.speed.toString() + " км/г"
-                        address_text.text = cameraItem.address
-                        distance_text.text = distance.roundToInt().toString() + " м"
-                        map_message_layout.visibility = View.VISIBLE
-
-                    }
-                    else if (distance >= 700 && cameraId==i){
-                        beepHelper=null
-                        map_message_layout.visibility = View.INVISIBLE
-                        cameraId = -1
-                    }
-                }
             }
         }
     }

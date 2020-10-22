@@ -2,6 +2,7 @@ package com.example.finedriver.servise
 
 import android.Manifest
 import android.app.*
+import android.app.Service.START_STICKY
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -88,7 +89,7 @@ class LocationUpdateService : Service() {
             removeLocationUpdates()
             stopSelf()
         }
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -110,7 +111,12 @@ class LocationUpdateService : Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         if (!mChangingConfiguration && MapUtils.requestingLocationUpdates(this)) {
-            startForeground(NOTIFICATION_ID, getNotification())
+            val notig= getNotification()
+            notig?.let {
+                mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+
+            }
+            /*startForeground(NOTIFICATION_ID, getNotification())*/
         }
         return true
     }
@@ -136,10 +142,14 @@ class LocationUpdateService : Service() {
 
         val intent = Intent(ACTION_BROADCAST)
         intent.putExtra(EXTRA_LOCATION, location)
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 
         if (serviceIsRunningInForeground(this)) {
-            mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+            val notig= getNotification()
+            notig?.let {
+                mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+
+            }
         }
     }
 
@@ -148,9 +158,11 @@ class LocationUpdateService : Service() {
         val intent = Intent(this, LocationUpdateService::class.java)
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true)
 
+        //val coordinationText = mLocation!!.latitude.toString()+" " + mLocation!!.longitude.toString()
+
         var notification : Notification? = null
 
-  /*      val servicePendingIntent = PendingIntent.getService(this, 0, intent,
+        /*val servicePendingIntent = PendingIntent.getService(this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT)*/
 
         for ( i in camerasList.indices) {
@@ -158,25 +170,28 @@ class LocationUpdateService : Service() {
             val endPoint = Location("Camera")
             endPoint.latitude = cameraItem.lat
             endPoint.longitude = cameraItem.lon
-            var distance = mLocation!!.distanceTo(endPoint).toDouble()
+            val distance = mLocation!!.distanceTo(endPoint).toDouble()
 
 
-            distanceToCamera = "Відстань до камери: "+distance.roundToInt().toString() + " м"
+            distanceToCamera = "Відстань до камери: "+distance.roundToInt().toString() + " м" +
+                    "\n Обмеження " + cameraItem.speed + " км/г"
             speedLimit = cameraItem.speed.toString() + " км/г"
             address = cameraItem.address
 
 
-            beepHelper = BeepHelper()
             if (distance <= 200) {
                 notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper = BeepHelper()
                 beepHelper!!.beep(100)
             }
             else if (distance <= 400) {
                 notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper = BeepHelper()
                 beepHelper!!.beep(500)
             }
             else if (distance <= 700) {
                 notification = getNotificationWithInfo(distanceToCamera,speedLimit,address)
+                beepHelper = BeepHelper()
                 beepHelper!!.beep(1000)
                 cameraId = i
             }
@@ -187,47 +202,15 @@ class LocationUpdateService : Service() {
             }
         }
 
-        if (notification==null) {
-            notification = getNotificationWithInfo("","","")
-        }
         return notification
 
-
-
-        //val remoteViews = RemoteViews(packageName, R.layout.notification)
-        /*remoteViews.setTextViewText(R.id.address_text, "Custom notification text")*/
-        /*remoteViews.setOnClickPendingIntent(R.id.root, rootPendingIntent)*/
-
-
-        /*
-       Пригодится для кнопки перезапуска
-       val activityPendingIntent = PendingIntent.getActivity(this, 0,
-            Intent(this, MainMenuActivity::class.java), 0)*/
-
-        /*val builder = NotificationCompat.Builder(this)
-            *//*.setSmallIcon(R.drawable.ic_camera)
-            .setCustomBigContentView(remoteViews)*//*
-            .setColor(ContextCompat.getColor(this, R.color.pink))
-            .addAction(
-                R.drawable.ic_exit, getString(R.string.remove_location_updates),
-                servicePendingIntent)
-            .setContentText(coordinationText)
-            .setOngoing(true)
-            .setPriority(Notification.PRIORITY_HIGH)
-            .setSmallIcon(R.drawable.ic_camera)
-            .setTicker(coordinationText)
-            .setWhen(System.currentTimeMillis())
-        // Set the Channel ID for Android O.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID) // Channel ID
-        }*/
-        //return builder.build()
     }
 
     fun getNotificationWithInfo(distanceToCamera : String, speedLimit : String,
-            address : String) : Notification?{
+                                     address : String) : Notification?{
 
         val intent = Intent(this, LocationUpdateService::class.java)
+
         val servicePendingIntent = PendingIntent.getService(this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -235,13 +218,14 @@ class LocationUpdateService : Service() {
             /*.setSmallIcon(R.drawable.ic_camera)
             .setCustomBigContentView(remoteViews)*/
             .setColor(ContextCompat.getColor(this, R.color.pink))
-       /*     .addAction(
-                R.drawable.ic_exit, getString(R.string.remove_location_updates),
-                servicePendingIntent)*/
+                 .addAction(
+                     R.drawable.ic_exit, getString(R.string.remove_location_updates),
+                     servicePendingIntent)
             .setContentText(distanceToCamera)
             .setOngoing(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_camera)
+           /* .setLargeIcon(R.drawable.ic_big_camera)*/
             .setTicker(speedLimit)
             .setWhen(System.currentTimeMillis())
         // Set the Channel ID for Android O.

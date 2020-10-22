@@ -20,11 +20,11 @@ import kotlinx.android.synthetic.main.fragment_main_menu.*
  */
 class MainMenuFragment : Fragment(R.layout.fragment_main_menu), GoogleApiClient.OnConnectionFailedListener {
 
-    //private var googleApiClient: GoogleApiClient? = null
+    private var googleApiClient: GoogleApiClient? = null
 
     override fun onStart() {
         super.onStart()
-/*        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
 
@@ -49,11 +49,11 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu), GoogleApiClient.
             handleSignInResult(result)
         } else {
             opr.setResultCallback { googleSignInResult -> handleSignInResult(googleSignInResult) }
-        }*/
+        }
     }
 
 
-/*    private fun handleSignInResult(result: GoogleSignInResult) {
+    private fun handleSignInResult(result: GoogleSignInResult) {
         if (result.isSuccess) {
             val account = result.signInAccount
 
@@ -69,7 +69,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu), GoogleApiClient.
 
     private fun gotoLoginActivity() {
         findNavController().navigate(R.id.action_mainMenyFragment_to_loginActivity)
-    }*/
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,6 +83,13 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu), GoogleApiClient.
         exitLayout.setOnClickListener(exitClickListener)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (googleApiClient != null && googleApiClient!!.isConnected()) {
+            googleApiClient?.stopAutoManage(requireActivity())
+            googleApiClient?.disconnect()
+        }
+    }
 
     private val mapClickListener: View.OnClickListener = View.OnClickListener { view ->
         findNavController().navigate(R.id.action_mainMenyFragment_to_mapsFragment)

@@ -111,7 +111,12 @@ class LocationUpdateService : Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         if (!mChangingConfiguration && MapUtils.requestingLocationUpdates(this)) {
-            startForeground(NOTIFICATION_ID, getNotification())
+            val notig= getNotification()
+            notig?.let {
+                mNotificationManager!!.notify(NOTIFICATION_ID, getNotification())
+
+            }
+            /*startForeground(NOTIFICATION_ID, getNotification())*/
         }
         return true
     }

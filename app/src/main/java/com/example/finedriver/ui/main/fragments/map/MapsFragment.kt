@@ -82,14 +82,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         myReceiver = MyReceiver()
         fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
-        if (MapUtils.requestingLocationUpdates(activity)) {
-            if (!isPermissionGranted()) {
-                enableMyLocation()
-            }
-        }
-
-
-
     }
 
     override fun onCreateView(
@@ -106,6 +98,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = SupportMapFragment.newInstance()
         childFragmentManager.beginTransaction().add(R.id.mapContainer, mapFragment).commit()
         mapFragment?.getMapAsync(this)
+
+
 
         my_location_button.setOnClickListener(myLocationClickListener)
         find_location_button.setOnClickListener(findLocationClickListener)
@@ -137,6 +131,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+
+
     override fun onResume() {
         super.onResume()
 
@@ -152,10 +148,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
     override fun onMapReady(googleMap: GoogleMap) {
+
         map = googleMap
 
         drawCamerasOnMap(map)
 
+        if (MapUtils.requestingLocationUpdates(activity)) {
+            if (!isPermissionGranted()) {
+                enableMyLocation()
+            }
+        }
         map.isTrafficEnabled = true
 
         getLastLocation()

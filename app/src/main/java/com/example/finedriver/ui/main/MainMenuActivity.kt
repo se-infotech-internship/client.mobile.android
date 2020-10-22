@@ -53,11 +53,11 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                 requestNotificationPermission()
         }*/
 
-        if (MapUtils.requestingLocationUpdates(this)) {
+ /*       if (MapUtils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
                 requestPermissions()
             }
-        }
+        }*/
 
         mServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -107,7 +107,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         super.onStop()
     }
 
-    private fun checkPermissions(): Boolean {
+/*    private fun checkPermissions(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
             Manifest.permission.ACCESS_FINE_LOCATION)
     }
@@ -120,7 +120,7 @@ class MainMenuActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             ActivityCompat.requestPermissions(this@MainMenuActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS_REQUEST_CODE)
         }
-    }
+    }*/
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

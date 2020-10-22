@@ -1,5 +1,6 @@
 package com.example.finedriver.ui.main.fragments
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import kotlinx.android.synthetic.main.fragment_main_menu.*
 import kotlinx.android.synthetic.main.fragment_main_menu.image_icon_profile
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 
@@ -28,11 +28,12 @@ class UserProfileFragment : Fragment(), GoogleApiClient.OnConnectionFailedListen
             .requestEmail()
             .build()
 
-        googleApiClient = GoogleApiClient.Builder(requireContext())
-            .enableAutoManage(requireActivity(), this)
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build()
-
+        if(googleApiClient == null || !googleApiClient!!.isConnected()) {
+            googleApiClient = GoogleApiClient.Builder(requireContext())
+                .enableAutoManage(requireActivity(),1, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build()
+        }
         val opr =
             Auth.GoogleSignInApi.silentSignIn(googleApiClient)
         if (opr.isDone) {
@@ -50,6 +51,14 @@ class UserProfileFragment : Fragment(), GoogleApiClient.OnConnectionFailedListen
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_profile, container, false)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (googleApiClient != null && googleApiClient!!.isConnected()) {
+            googleApiClient?.stopAutoManage(requireActivity())
+            googleApiClient?.disconnect()
+        }
     }
 
     private fun handleSignInResult(result: GoogleSignInResult) {

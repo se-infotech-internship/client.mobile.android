@@ -88,7 +88,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu), GoogleApiClient.
         findNavController().navigate(R.id.action_mainMenyFragment_to_mapsFragment)
     }
     private val finesClickListener: View.OnClickListener = View.OnClickListener { view ->
-        findNavController().navigate(R.id.action_mainMenyFragment_to_finesFragment);
+        findNavController().navigate(R.id.action_mainMenyFragment_to_findFinesFragment);
     }
     private val cameraClickListener: View.OnClickListener = View.OnClickListener { view ->
         findNavController().navigate(R.id.action_mainMenyFragment_to_cameraListFragment);

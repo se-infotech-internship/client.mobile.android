@@ -2,6 +2,7 @@ package com.example.finedriver.servise
 
 import android.Manifest
 import android.app.*
+import android.app.Service.START_STICKY
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -88,7 +89,7 @@ class LocationUpdateService : Service() {
             removeLocationUpdates()
             stopSelf()
         }
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -164,10 +165,11 @@ class LocationUpdateService : Service() {
             val endPoint = Location("Camera")
             endPoint.latitude = cameraItem.lat
             endPoint.longitude = cameraItem.lon
-            var distance = mLocation!!.distanceTo(endPoint).toDouble()
+            val distance = mLocation!!.distanceTo(endPoint).toDouble()
 
 
-            distanceToCamera = "Відстань до камери: "+distance.roundToInt().toString() + " м"
+            distanceToCamera = "Відстань до камери: "+distance.roundToInt().toString() + " м" +
+                    "\n Обмеження " + cameraItem.speed + " км/г"
             speedLimit = cameraItem.speed.toString() + " км/г"
             address = cameraItem.address
 
@@ -195,9 +197,6 @@ class LocationUpdateService : Service() {
             }
         }
 
-        /*if (notification==null) {
-            notification = getNotificationWithInfo("","","")
-        }*/
         return notification
 
     }
@@ -220,7 +219,7 @@ class LocationUpdateService : Service() {
             .setContentText(distanceToCamera)
             .setOngoing(true)
             .setPriority(Notification.PRIORITY_HIGH)
-            /*.setSmallIcon(R.drawable.ic_login_logo)*/
+            .setSmallIcon(R.drawable.ic_camera)
            /* .setLargeIcon(R.drawable.ic_big_camera)*/
             .setTicker(speedLimit)
             .setWhen(System.currentTimeMillis())

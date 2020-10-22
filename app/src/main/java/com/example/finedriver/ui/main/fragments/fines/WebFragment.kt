@@ -16,6 +16,20 @@ class WebFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        return inflater.inflate(R.layout.fragment_web, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        webView = fines_webView
         webView.settings.setJavaScriptEnabled(true)
 
         webView.webViewClient = object : WebViewClient() {
@@ -25,12 +39,5 @@ class WebFragment : Fragment() {
             }
         }
         webView.loadUrl("https://uapay.ua/fines/")
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_web, container, false)
     }
 }

@@ -87,7 +87,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimaryDark"
             android:padding="8dp"
-            tools:src="@mipmap/ic_launcher_round" />
+             />
 
     </androidx.cardview.widget.CardView>
 

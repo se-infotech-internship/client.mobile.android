@@ -115,14 +115,14 @@
             android:id="@+id/action_mainMenyFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <action
-            android:id="@+id/action_mainMenyFragment_to_finesFragment"
-            app:destination="@id/finesFragment" />
-        <action
             android:id="@+id/action_mainMenyFragment_to_settingsFragment2"
             app:destination="@id/settingsFragment2" />
         <action
             android:id="@+id/action_mainMenyFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_mainMenyFragment_to_findFinesFragment"
+            app:destination="@id/findFinesFragment" />
     </fragment>
     <fragment
         android:id="@+id/finesFragment"
@@ -134,6 +134,9 @@
         <action
             android:id="@+id/action_finesFragment_to_webFragment"
             app:destination="@id/webFragment" />
+        <action
+            android:id="@+id/action_finesFragment_to_findFinesFragment"
+            app:destination="@id/findFinesFragment" />
     </fragment>
     <fragment
         android:id="@+id/webFragment"
@@ -148,4 +151,15 @@
         android:name="com.example.finedriver.ui.login.LoginActivity"
         android:label="activity_login"
         tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/findFinesFragment"
+        android:name="com.example.finedriver.ui.main.fragments.fines.FindFinesFragment"
+        android:label="FindFinesFragment" >
+        <action
+            android:id="@+id/action_findFinesFragment_to_mainMenyFragment"
+            app:destination="@id/mainMenyFragment" />
+        <action
+            android:id="@+id/action_findFinesFragment_to_finesFragment"
+            app:destination="@id/finesFragment" />
+    </fragment>
 </navigation>

@@ -15,6 +15,7 @@
         android:layout_height="56dp"
         android:orientation="vertical"
         android:layout_marginTop="44dp"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,22 +31,32 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/map_item"
+            app:layout_constraintStart_toEndOf="@+id/map_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Мапа" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/map_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/map_card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_map"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/map_item"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:background="@drawable/ic_menu_map"
+                android:src="@drawable/ic_menu_map"
+                />
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -63,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,22 +90,31 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/camera_item"
+            app:layout_constraintStart_toEndOf="@+id/camera_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Перелік відеокамер" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/camera_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/camera_card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/camera_item"
+                android:layout_width="20dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_menu_camera"
+                android:src="@drawable/ic_menu_camera"
+                />
+
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -109,6 +130,7 @@
         android:id="@+id/finesLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:clipToPadding="true"
         android:contextClickable="true"
@@ -129,22 +151,34 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fines_item"
+            app:layout_constraintStart_toEndOf="@+id/fines_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Штрафи" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/fines_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fines_card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_files"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fines_item"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:background="@drawable/ic_menu_fines"
+                android:src="@drawable/ic_menu_fines"
+                 />
+
+        </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/fines_max"
@@ -174,6 +208,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -190,22 +225,32 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profile_item"
+            app:layout_constraintStart_toEndOf="@+id/profile_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Профіль користувача" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/profile_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/profile_item"
+                android:layout_width="16dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:background="@drawable/ic_menu_profile"
+                android:src="@drawable/ic_menu_profile"
+                />
+
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -222,6 +267,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -238,22 +284,32 @@
             android:text="@string/settings"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/settings_item"
+            app:layout_constraintStart_toEndOf="@+id/setting_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Налаштування додатку" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/settings_item"
-            android:layout_width="41dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/setting_card_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/setting_item"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:background="@drawable/ic_menu_settings"
+                android:src="@drawable/ic_menu_settings"
+                />
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -271,6 +327,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="vertical"
+        android:background="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -287,22 +344,32 @@
             android:text="@string/exit_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/exit_item"
+            app:layout_constraintStart_toEndOf="@+id/exit_card_view"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Вихід" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/exit_item"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exit_card_view"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="4dp"
             android:layout_marginStart="24dp"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_exit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/exit_item"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:background="@drawable/ic_menu_exit"
+                android:src="@drawable/ic_menu_exit"
+                />
+
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
